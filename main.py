@@ -19,10 +19,12 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.actionhelp.triggered.connect(self.helppage)
 
     def save_file(self):
-        fileName2, ok2 = QFileDialog.getSaveFileName(self,
-                                                     "文件保存",
-                                                     "./",
-                                                     "All Files (*);;Text Files (*.txt)")
+        fileName2, ok2 = QFileDialog.getSaveFileName(None, "文件保存", "./", "All Files (*);;Text Files (*.txt)")
+        save_path = fileName2
+        if save_path is not None:
+            with open(file=save_path, mode='a+', encoding='utf-8') as file:
+                file.write('self.text_value.toPlainText()')
+            print('已保存！')
 
     def conn(self):
         self.a = connectPic.picture()
