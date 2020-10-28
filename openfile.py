@@ -1,12 +1,13 @@
 from PyQt5 import QtWidgets,QtCore
 from PyQt5.QtWidgets import QFileDialog
 import sys
-
+from open_file import open_event
 
 class MyWindow(QtWidgets.QWidget):
-    save_path=''
+    # save_path=''
     def __init__(self):
         super(MyWindow, self).__init__()
+        self.resize(400,300)
         self.myButton = QtWidgets.QPushButton(self)
         self.myButton.setGeometry(QtCore.QRect(40, 200, 200, 20))
         self.oneBtn = QtWidgets.QPushButton(self)
@@ -16,6 +17,15 @@ class MyWindow(QtWidgets.QWidget):
         self.oneBtn.setObjectName("oneButton")
         self.oneBtn.setText("Test1")
         self.oneBtn.clicked.connect(self.save_event)
+        self.twoBtn = QtWidgets.QPushButton(self)
+        self.twoBtn.setText('Test2')
+        self.twoBtn.clicked.connect(open_event)
+        cc = QtWidgets.QVBoxLayout()
+        cc.addWidget(self.myButton)
+        cc.addWidget(self.oneBtn)
+        cc.addWidget(self.twoBtn)
+        self.setLayout(cc)
+        self.show()
 
     def msg(self):
         # directory1 = QFileDialog.getExistingDirectory(self,
@@ -41,27 +51,33 @@ class MyWindow(QtWidgets.QWidget):
                                                      "All Files (*);;Text Files (*.txt)")
         print(fileName2,ok2)
 
-    def open_event(self):
-        # _translate = QtCore.QCoreApplication.translate
-        directory1 = QFileDialog.getOpenFileName(None, "选择文件", "/")
-        print(directory1)  # 打印文件夹路径
-        path = directory1[0]
-        # self.open_path_text.setText(_translate("Form", path))
-        if path is not None:
-            with open(file=path, mode='r+', encoding='utf-8') as file:
-                self.text_value.setPlainText(file.read())
+    # def open_event(self):
+    #     directory1 = None
+    #     directory1, ok1 = QFileDialog.getOpenFileName(None, "选择文件", "/")
+    #     print(directory1)  # 打印文件夹路径ok1
+    #     path = directory1
+    #     if path:
+    #         try:
+    #             with open(file=path, mode='r+', encoding='utf-8') as file:
+    #                 # self.text_value.setPlainText(file.read())
+    #                 print(file.read())
+    #         except:
+    #             print('not exist or not txt')
 
     def save_event(self):
-        global save_path
+        # global save_path
         # _translate = QtCore.QCoreApplication.translate
         fileName2, ok2 = QFileDialog.getSaveFileName(None, "文件保存", "./","All Files (*);;Text Files (*.txt)")
         print(fileName2)  # 打印保存文件的全部路径（包括文件名和后缀名）
         save_path = fileName2
         # self.save_path_text.setText(_translate("Form", save_path))
-        if save_path is not None:
-            with open(file=save_path, mode='a+', encoding='utf-8') as file:
-                file.write('self.text_value.toPlainText()')
-            print('已保存！')
+        if save_path:
+            try:
+                with open(file=save_path, mode='a+', encoding='utf-8') as file:
+                    file.write('self.text_value.toPlainText()')
+                print('已保存！')
+            except:
+                print('write fail')
 
     '''
     directory1 = QFileDialog.getExistingDirectory(self, "选择文件夹", "/")
@@ -87,7 +103,6 @@ class MyWindow(QtWidgets.QWidget):
 
 
 if __name__ == "__main__":
-
 
     app = QtWidgets.QApplication(sys.argv)
     myshow = MyWindow()
