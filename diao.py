@@ -21,10 +21,16 @@ def insert(time, value):
     a.exee()
 
 
-def read_db():
-    b = '''SELECT * FROM data;'''
+def read_db(case):
+    b = f'''SELECT * FROM data where {case};'''
     a = exe(b)
     out = a.exee()
+
+def delete(case):
+    b = f'''DELETE from COMPANY where {case};'''
+    a = exe(b)
+    out = a.exee()
+
 
 
 
