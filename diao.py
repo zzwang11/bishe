@@ -1,4 +1,4 @@
-from con_tb import exe
+# from con_tb import exe
 import sqlite3
 '''
 创建表格

@@ -26,6 +26,8 @@ inst.write('TRIG:SCOPe ALL')
 inst.write('SENSe:SWEep:MODE CONTinuous')
 inst.write('FORMat:DATA REAL,64')
 inst.write('CALCulate:PARameter:SELect ''MySMeaS21''')
+
+
 inst.write('INITiate:IMMediate;*wai')
 inst.write('Display:WINDow1:TRACe1:Y:Scale:AUTO')
 inst.write('CALCulate:DATA? SDATA')
@@ -37,6 +39,26 @@ aa = inst.query_ascii_values("trace:data?")
 print(aa)
 inst.query("status:measurement?")
 inst.write("trace:clear; trace:feed:control next")
+"""
+% fprintf(instrObj, 'FORMat:DATA REAL,64'); % 64  位 浮点数
+fprintf(instrObj, 'FORMat:DATA ASCII'); % 编码方式
+fprintf(instrObj, 'CALCulate:PARameter:SELect ''MySMeaS21''');
+% i = 0;
+% while (i < 2) % 多次读取的话使用循环即可
+    fprintf(instrObj, 'INITiate:IMMediate;*wai');
+fprintf(instrObj, 'Display:WINDow1:TRACe1:Y:Scale:AUTO');
+fprintf(instrObj, 'CALCulate:DATA? SDATA');
+% rawDataDB = binblockread(instrObj, 'double');
+data = fread(instrObj); % 读取数据
+fid = fopen('test.txt', 'wb');
+data = fwrite(fid, data, 'char'); % 保存下来
+% read terminating character
+% d = fread(instrObj, 1, 'char');
+% i = i + 1;
+% end
+"""
+inst.close()
+del inst
 
 """
 instrumentVISAAddress = 'TCPIP0::192.168.1.10::hpib7,16::INSTR';
