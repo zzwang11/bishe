@@ -1,18 +1,24 @@
 from con_tb import exe
-
+import sqlite3
 '''
 创建表格
 '''
 
 
-def create_tb():
+def create_tb(name):
+    conn = sqlite3.connect(f'{name}.db')
+    c = conn.cursor()
+
     b = '''CREATE TABLE data
                (ID INT PRIMARY KEY     NOT NULL,
-               NAME           TEXT    NOT NULL,
-               VALUE            INT     NOT NULL,
-               SALARY         TEXT);'''
-    a = exe(b)
-    a.exee()
+               TIME       DATETIME    NOT NULL,
+               VALUE1          DOUBLE,     
+               VALUE2          DOUBLE,
+                               TEXT);'''
+    c.execute(b)
+    conn.commit()
+    conn.close()
+
 
 
 def insert(time, value):
