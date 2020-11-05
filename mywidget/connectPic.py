@@ -7,6 +7,8 @@ from PyQt5.QtCore import *
 '''
 连接器件的图片教程页面
 '''
+
+
 class picture(QWidget):
     def __init__(self):
         super(picture, self).__init__()

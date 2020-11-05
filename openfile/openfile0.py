@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets,QtCore
 from PyQt5.QtWidgets import QFileDialog
 import sys
-from open_file import open_event
+from openfile.open_file import open_event
 
 class MyWindow(QtWidgets.QWidget):
     # save_path=''

@@ -3,9 +3,9 @@
 @author: FibLab
 """
 
-import visa
+# import visa
 import time
-import numpy as np
+# import numpy as np
 # import OSAtunics
 # import matplotlib.pyplot
 
@@ -138,3 +138,20 @@ import numpy as np
 #             transparent=False, bbox_inches=None, pad_inches=0.1,
 #             frameon=None)
 #
+
+import time
+import math
+#
+#
+# print(a)
+# print(time.asctime(time.localtime()))
+# print(time.strftime('%Y-%m-%d %H-%M-%S',time.localtime()))
+
+def c(*aa):
+    print(aa)
+    print(type(aa))
+    for i in aa:
+        print(i)
+
+
+c(1,2,3,4,'aaaa')
