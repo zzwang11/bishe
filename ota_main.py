@@ -1,14 +1,16 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow,QFileDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 from mywidget.MainWindow import Ui_MainWindow
-from PyQt5.QtCore import QCoreApplication,pyqtSignal,QTimer
+from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer
 from PyQt5 import QtGui
 from mywidget import connectPic, helpPage
-from control_vna.control_suit import suit
-from control_vna.test import xee
+from tools import write_conf
+from dialog_util.dialogUtil import *
+
 from control_vna.control_suit import suit
 
 import time
+
 
 class MyMainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -20,6 +22,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.actionconnect.triggered.connect(self.conn)
         self.action5.triggered.connect(QCoreApplication.instance().quit)
         self.actionhelp.triggered.connect(self.helppage)
+        self.pushButton_6.clicked.connect(self.writeConf)
+        self.pushButton_7.clicked.connect(self.faildialog)
 
     def save_file(self):
         save_path, ok2 = QFileDialog.getSaveFileName(None, "文件保存", "./", "All Files (*);;Text Files (*.txt)")
@@ -29,25 +33,40 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
                 file.write('wen jian')
 
     def conn(self):
-        self.a = connectPic.picture()
-        self.a.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
-        self.a.show()
+        a = connectPic.picture()
+        a.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
+        a.show()
 
     def helppage(self):
-        self.b = helpPage.mainwindow()
-        self.a.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
-        self.b.show()
+        a = helpPage.mainwindow()
+        a.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
+        a.show()
 
     def connect(self):
         self.con_vna = suit()
 
+    def writeConf(self):
+        inst = self.LineEdit.Text()
+        centerf = self.LineEdit_2.Text()
+        span = self.LineEdit_3.Text()
+        ifband = self.LineEdit_4.Text()
+        temp = self.LineEdit_5.Text()
+        averages = self.LineEdit_6.Text()
+        power = self.LineEdit_7.Text()
+        edelay = self.LineEdit_7.Text()
+        points = self.LineEdit_8.Text()
+        outputfile = self.LineEdit_9.Text()
+        write_conf.write(inst, centerf, span, temp, averages, power, edelay, ifband, points, outputfile)
+
+    def faildialog(self):
+        fail_dialog(self,'shibai','you lose')
+
+
+    def succDialog(self):
+        a = QMessageBox()
+        a.information(self, '成功', 'success', QMessageBox.Yes | QMessageBox.Cancel, QMessageBox.Yes)
 
     # QApplication.processEvents()实现页面刷新
-    # def duo(self):
-    #     for i in range(100000):
-    #         # QApplication.processEvents()
-    #         # QTimer.time.sleep(0.1)
-
 
 
 
