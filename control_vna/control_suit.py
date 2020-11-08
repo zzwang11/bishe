@@ -1,5 +1,13 @@
 from control_vna.control import getdata
 from tools.read_conf import ReadConfig
+from PyQt5.QtCore import QThread
+
+
+class suit_cla(QThread):
+    def __init__(self):
+        super().__init__()
+    def run(self):
+        suit()
 
 
 def suit():

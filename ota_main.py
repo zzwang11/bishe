@@ -1,14 +1,13 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 from mywidget.MainWindow import Ui_MainWindow
-from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer
+from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread
 from PyQt5 import QtGui
 from mywidget import connectPic, helpPage
 from tools import write_conf
 from dialog_util.dialogUtil import *
-
-from control_vna.control_suit import suit
-
+from control_vna.control_suit import suit_cla
+from thread_exa.wait_thread import myThread
 import time
 
 
@@ -18,12 +17,16 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
         self.setupUi(self)
         self.pushButton_5.clicked.connect(QCoreApplication.instance().quit)
-        self.pushButton_4.clicked.connect(self.connect)
-        self.actionconnect.triggered.connect(self.conn)
+        self.pushButton.clicked.connect(self.measure)
+        self.pushButton_3.clicked.connect(self.terminate_m)
+        self.actionconnect.triggered.connect(self.con_pic)
         self.action5.triggered.connect(QCoreApplication.instance().quit)
         self.actionhelp.triggered.connect(self.helppage)
         self.pushButton_6.clicked.connect(self.writeConf)
-        self.pushButton_7.clicked.connect(self.faildialog)
+        self.pushButton_7.clicked.connect(self.fail_dialog)
+
+
+
 
     def save_file(self):
         save_path, ok2 = QFileDialog.getSaveFileName(None, "文件保存", "./", "All Files (*);;Text Files (*.txt)")
@@ -32,18 +35,34 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             with open(file=save_path, mode='a+', encoding='utf-8') as file:
                 file.write('wen jian')
 
-    def conn(self):
-        a = connectPic.picture()
-        a.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
-        a.show()
+    def con_pic(self):
+        self.a = connectPic.picture()
+        self.a.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
+        self.a.show()
 
     def helppage(self):
-        a = helpPage.mainwindow()
-        a.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
-        a.show()
+        self.a = helpPage.mainwindow()
+        self.a.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
+        self.a.show()
 
-    def connect(self):
-        self.con_vna = suit()
+    def measure(self):
+        # thread_exa = suit_cla()
+        # thread_exa.start()
+        self.pushButton.setEnabled(False)
+        self.thread1 = myThread()
+        self.thread1.start()
+        print(QThread.currentThread())
+
+    def pause(self):
+        self.thread1.wait()
+
+    def terminate_m(self):
+        self.thread1.terminate()
+        self.thread1.wait()
+        print(QThread.currentThread())
+        # del self.thread1
+        self.pushButton.setEnabled(True)
+
 
     def writeConf(self):
         inst = self.LineEdit.Text()
@@ -58,15 +77,17 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         outputfile = self.LineEdit_9.Text()
         write_conf.write(inst, centerf, span, temp, averages, power, edelay, ifband, points, outputfile)
 
-    def faildialog(self):
+    def fail_dialog(self):
         fail_dialog(self,'shibai','you lose')
 
 
-    def succDialog(self):
-        a = QMessageBox()
-        a.information(self, '成功', 'success', QMessageBox.Yes | QMessageBox.Cancel, QMessageBox.Yes)
+    def succ_dialog(self):
+        success_dialog(self, 'cheng gong', 'you win')
 
     # QApplication.processEvents()实现页面刷新
+    def calculate(self):
+        print('aaa')
+
 
 
 
