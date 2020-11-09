@@ -24,4 +24,5 @@ class myThread(QThread):
                 f.write('hahaha\n')
         # qmute.unlock()
 
+    # def pause(self):
 

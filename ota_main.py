@@ -1,10 +1,10 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 from mywidget.MainWindow import Ui_MainWindow
-from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread
+from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread,QWaitCondition
 from PyQt5 import QtGui
 from mywidget import connectPic, helpPage
-from tools import write_conf
+from tools import write_conf,read_conf
 from dialog_util.dialogUtil import *
 from control_vna.control_suit import suit_cla
 from thread_exa.wait_thread import myThread
@@ -22,8 +22,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.actionconnect.triggered.connect(self.con_pic)
         self.action5.triggered.connect(QCoreApplication.instance().quit)
         self.actionhelp.triggered.connect(self.helppage)
-        self.pushButton_6.clicked.connect(self.writeConf)
-        self.pushButton_7.clicked.connect(self.fail_dialog)
+        self.pushButton_6.clicked.connect(self.pause)
+        self.pushButton_7.clicked.connect(self.go_on)
+
 
 
 
@@ -56,6 +57,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
     def pause(self):
         self.thread1.wait()
 
+    def go_on(self):
+        self.thread1.start()
+
     def terminate_m(self):
         self.thread1.terminate()
         self.thread1.wait()
@@ -64,7 +68,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton.setEnabled(True)
 
 
-    def writeConf(self):
+    def writeconf(self):
         inst = self.LineEdit.Text()
         centerf = self.LineEdit_2.Text()
         span = self.LineEdit_3.Text()
@@ -76,6 +80,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         points = self.LineEdit_8.Text()
         outputfile = self.LineEdit_9.Text()
         write_conf.write(inst, centerf, span, temp, averages, power, edelay, ifband, points, outputfile)
+
+    def readconf(self):
+        self.rd = read_conf.myth('test_config','inst')
+        self.rd.start()
+        self.rd.wait()
+        print(self.rd.isRunning())
+
+
+
 
     def fail_dialog(self):
         fail_dialog(self,'shibai','you lose')
