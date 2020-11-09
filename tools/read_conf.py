@@ -1,6 +1,6 @@
 import configparser
 import os
-
+from PyQt5.QtCore import QThread
 
 class ReadConfig:
     """定义一个读取配置文件的类"""
@@ -9,7 +9,8 @@ class ReadConfig:
         if filepath:
             self.configpath = filepath
         else:
-            root_dir = os.path.dirname(os.path.abspath('.'))
+            # root_dir = os.path.dirname(os.path.abspath('.'))
+            root_dir = 'd://bishe'
             self.configpath = os.path.join(root_dir, "config.ini")
         self.cf = configparser.ConfigParser()
         self.cf.read(self.configpath)
@@ -23,5 +24,16 @@ class ReadConfig:
         self.cf.write(open(self.configpath,'w'))
 
 
+
+
+class myth(QThread):
+    def __init__(self,*param):
+        super().__init__()
+        self.param = param
+
+
+    def run(self):
+        a = ReadConfig()
+        a.get(*self.param)
 
 

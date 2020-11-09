@@ -13,4 +13,3 @@ def write(inst, centerf, span, temp, averages, power, edelay, ifband, points, ou
     conf.set('test_config', 'ifband',ifband)
     conf.set('test_config', 'points',points)
     conf.set('test_config', 'outputfile',outputfile)
-    # return 1
