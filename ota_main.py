@@ -27,17 +27,17 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.actionconnect.triggered.connect(self.con_pic)
         self.action5.triggered.connect(QCoreApplication.instance().quit)
         self.actionhelp.triggered.connect(self.helppage)
-        self.pushButton_6.clicked.connect(self.pause)
+        self.pushButton_6.clicked.connect(self.writeconf)
         self.pushButton_7.clicked.connect(self.go_on)
 
 
 
 
     def preset(self):
-        self.readconf()
+        # self.readconf()
 
         self.LineEdit.setInputMask('999.999.999.999;_')
-        self.LineEdit.setText()
+        # self.LineEdit.setText()
 
     def save_file(self):
         save_path, ok2 = QFileDialog.getSaveFileName(None, "文件保存", "./", "All Files (*);;Text Files (*.txt)")
@@ -89,6 +89,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         edelay = self.LineEdit_7.Text()
         points = self.LineEdit_8.Text()
         outputfile = self.LineEdit_9.Text()
+
         write_conf.write(IP, centerf, span, temp, averages, power, edelay, ifband, points, outputfile)
 
     def readconf(self):

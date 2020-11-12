@@ -1,5 +1,16 @@
 from tools.read_conf import ReadConfig
+from PyQt5.QtCore import QThread
 
+
+class writeThread(QThread):
+    def __init__(self,):
+        super().__init__()
+
+    def run(self):
+        self.wri()
+
+    def wri(self, inst, centerf, span, temp, averages, power, edelay, ifband, points, outputfile):
+        write(inst, centerf, span, temp, averages, power, edelay, ifband, points, outputfile)
 
 def write(inst, centerf, span, temp, averages, power, edelay, ifband, points, outputfile):
     conf = ReadConfig()
