@@ -13,7 +13,7 @@ class suit_cla(QThread):
 def suit():
     conf = ReadConfig()
     span = conf.get('test_config','span')
-    inst = conf.get('test_config','inst')
+    ip = conf.get('test_config','ip')
     centerf = conf.get('test_config','conterf')
     temp = conf.get('test_config','temp')
     averages = conf.get('test_config','averages')
@@ -22,6 +22,7 @@ def suit():
     ifband = conf.get('test_config', 'ifband')
     points = conf.get('test_config', 'points')
     outputfile = conf.get('test_config', 'outputfile')
+    inst = f'TCPIP::{ip}::inst0::INSTR'
     file_list = []
     if span > 200:
         ad = centerf-span/2

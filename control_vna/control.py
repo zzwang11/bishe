@@ -68,12 +68,13 @@ def read_data(pna, points, outputfile, power, temp):
     return file1
 
 
-def getdata(inst: str, centerf: float, span: float, temp: float, averages: int = 10, power: float = -30,
-            edelay: float = 40, ifband: float = 5, points: int = 20000, outputfile: str = "results.csv"):
+def getdata(inst: str, centerf: float, span: float, temp: float, averages: int, power: float,
+            edelay: float, ifband: float, points: int, outputfile: str = "results.csv"):
     """
     function to get data and put it into a user specified file
     """
-    tcp_addr = 'TCPIP::192.168.1.1::inst0::INSTR'
+    # addr = '192.168.0.1'
+    tcp_addr = 'TCPIP::"192.168.0.1"::inst0::INSTR'
     gpib_addr = 'GPIB0::12::INSTR'
 
     # set up the PNA to measure s21 for the specific instrument GPIB0::16::INSTR

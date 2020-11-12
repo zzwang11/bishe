@@ -16,6 +16,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         super(MyMainWindow, self).__init__(parent)
         self.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
         self.setupUi(self)
+        self.preset()
+
+
+
+
         self.pushButton_5.clicked.connect(QCoreApplication.instance().quit)
         self.pushButton.clicked.connect(self.measure)
         self.pushButton_3.clicked.connect(self.terminate_m)
@@ -28,6 +33,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
 
 
+    def preset(self):
+        self.readconf()
+
+        self.LineEdit.setInputMask('999.999.999.999;_')
+        self.LineEdit.setText()
 
     def save_file(self):
         save_path, ok2 = QFileDialog.getSaveFileName(None, "文件保存", "./", "All Files (*);;Text Files (*.txt)")
@@ -69,7 +79,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
 
     def writeconf(self):
-        inst = self.LineEdit.Text()
+        IP = self.LineEdit.Text()
         centerf = self.LineEdit_2.Text()
         span = self.LineEdit_3.Text()
         ifband = self.LineEdit_4.Text()
@@ -79,13 +89,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         edelay = self.LineEdit_7.Text()
         points = self.LineEdit_8.Text()
         outputfile = self.LineEdit_9.Text()
-        write_conf.write(inst, centerf, span, temp, averages, power, edelay, ifband, points, outputfile)
+        write_conf.write(IP, centerf, span, temp, averages, power, edelay, ifband, points, outputfile)
 
     def readconf(self):
-        self.rd = read_conf.myth('test_config','inst')
+        self.rd = read_conf.myth('test_config', 'inst')
         self.rd.start()
         self.rd.wait()
-        print(self.rd.isRunning())
+
 
 
 

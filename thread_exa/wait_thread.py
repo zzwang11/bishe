@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QTime,QThread,pyqtSignal,QMutex
 import time
 # import win32con
-
+# 线程锁
 qmute = QMutex()
 class myThread(QThread):
     def __init__(self):
