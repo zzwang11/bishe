@@ -12,6 +12,7 @@ import time
 
 
 class MyMainWindow(QMainWindow, Ui_MainWindow):
+
     def __init__(self, parent=None):
         super(MyMainWindow, self).__init__(parent)
         self.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
@@ -22,7 +23,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
 
         self.pushButton_5.clicked.connect(QCoreApplication.instance().quit)
-        self.pushButton.clicked.connect(self.measure)
+        # self.pushButton.clicked.connect(self.measure)
+        self.pushButton.clicked.connect(self.readconf)
+        self.pushButton_2.clicked.connect(self.pause)
         self.pushButton_3.clicked.connect(self.terminate_m)
         self.actionconnect.triggered.connect(self.con_pic)
         self.action5.triggered.connect(QCoreApplication.instance().quit)
@@ -33,11 +36,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
 
 
+
+
     def preset(self):
-        # self.readconf()
 
         self.LineEdit.setInputMask('999.999.999.999;_')
-        # self.LineEdit.setText()
+
+        # self.readconf()
 
     def save_file(self):
         save_path, ok2 = QFileDialog.getSaveFileName(None, "文件保存", "./", "All Files (*);;Text Files (*.txt)")
@@ -62,10 +67,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton.setEnabled(False)
         self.thread1 = myThread()
         self.thread1.start()
-        print(QThread.currentThread())
+        # print(QThread.currentThread())
 
     def pause(self):
-        self.thread1.wait()
+        self.thread1.pause()
+
 
     def go_on(self):
         self.thread1.start()
@@ -76,7 +82,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         print(QThread.currentThread())
         # del self.thread1
         self.pushButton.setEnabled(True)
-
 
     def writeconf(self):
         IP = self.LineEdit.Text()
@@ -90,15 +95,19 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         points = self.LineEdit_8.Text()
         outputfile = self.LineEdit_9.Text()
 
-        write_conf.write(IP, centerf, span, temp, averages, power, edelay, ifband, points, outputfile)
-
+        self.wr = write_conf.writeThread(IP, centerf, span, temp, averages, power, edelay, ifband, points, outputfile)
+        self.wr.start()
     def readconf(self):
-        self.rd = read_conf.myth('test_config', 'inst')
+        self.rd = read_conf.myth('test_config', 'ip')
+        self.rd.myOut.connect(self.set_text)
         self.rd.start()
-        self.rd.wait()
 
 
 
+
+
+    def set_text(self,st):
+        self.LineEdit.setText(st)
 
 
     def fail_dialog(self):
