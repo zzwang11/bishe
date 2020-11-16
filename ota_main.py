@@ -17,7 +17,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         super(MyMainWindow, self).__init__(parent)
         self.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
         self.setupUi(self)
-        self.preset()
+        # self.preset()
 
 
 
@@ -25,8 +25,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_5.clicked.connect(QCoreApplication.instance().quit)
         # self.pushButton.clicked.connect(self.measure)
         self.pushButton.clicked.connect(self.readconf)
-        self.pushButton_2.clicked.connect(self.pause)
-        self.pushButton_3.clicked.connect(self.terminate_m)
+        # self.pushButton_2.clicked.connect(self.pause)
+        self.pushButton_2.clicked.connect(self.writeconf)
+        # self.pushButton_3.clicked.connect(self.terminate_m)
+        self.pushButton_3.clicked.connect(self.readline)
         self.actionconnect.triggered.connect(self.con_pic)
         self.action5.triggered.connect(QCoreApplication.instance().quit)
         self.actionhelp.triggered.connect(self.helppage)
@@ -36,11 +38,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
 
 
+    def readline(self):
+        c = self.LineEdit_2.text()
+        print(type(c))
+        print(len(c))
+        print(self.LineEdit_2.text(),'aaaa',123)
 
+    # def preset(self):
 
-    def preset(self):
-
-        self.LineEdit.setInputMask('999.999.999.999;_')
+        # self.LineEdit.setInputMask('999.999.999.999;_')
 
         # self.readconf()
 
@@ -84,38 +90,44 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton.setEnabled(True)
 
     def writeconf(self):
-        IP = self.LineEdit.Text()
-        centerf = self.LineEdit_2.Text()
-        span = self.LineEdit_3.Text()
-        ifband = self.LineEdit_4.Text()
-        temp = self.LineEdit_5.Text()
-        averages = self.LineEdit_6.Text()
-        power = self.LineEdit_7.Text()
-        edelay = self.LineEdit_7.Text()
-        points = self.LineEdit_8.Text()
-        outputfile = self.LineEdit_9.Text()
+        IP = self.LineEdit.text()
+        centerf = self.LineEdit_2.text()
+        span = self.LineEdit_3.text()
+        ifband = self.LineEdit_4.text()
+        temp = self.LineEdit_5.text()
+        averages = self.LineEdit_6.text()
+        power = self.LineEdit_7.text()
+        edelay = self.LineEdit_7.text()
+        points = self.LineEdit_8.text()
+        outputfile = self.LineEdit_9.text()
 
         self.wr = write_conf.writeThread(IP, centerf, span, temp, averages, power, edelay, ifband, points, outputfile)
         self.wr.start()
+
     def readconf(self):
-        self.rd = read_conf.myth('test_config', 'ip')
+        self.rd = read_conf.myth('test_all')
         self.rd.myOut.connect(self.set_text)
         self.rd.start()
 
-
-
-
-
-    def set_text(self,st):
-        self.LineEdit.setText(st)
+    def set_text(self,a):
+        self.LineEdit.setText(a[0])
+        # self.LineEdit_2.setText(a[1])
+        # self.LineEdit_3.setText(a[2])
+        # self.LineEdit_4.setText(a[3])
+        # self.LineEdit_5.setText(a[4])
+        # self.LineEdit_6.setText(a[5])
+        # self.LineEdit_7.setText(a[6])
+        # self.LineEdit_8.setText(a[7])
+        # self.LineEdit_9.setText(a[8])
+        # self.LineEdit_10.setText(a[9])
 
 
     def fail_dialog(self):
-        fail_dialog(self,'shibai','you lose')
+        fail_dialog(self,'shibai','you fail')
 
 
     def succ_dialog(self):
-        success_dialog(self, 'cheng gong', 'you win')
+        success_dialog(self, 'cheng gong', 'you success')
 
     # QApplication.processEvents()实现页面刷新
     def calculate(self):

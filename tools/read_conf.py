@@ -2,6 +2,7 @@ import configparser
 import os
 from PyQt5.QtCore import QThread,pyqtSignal
 
+
 class ReadConfig:
     """定义一个读取配置文件的类"""
 
@@ -9,9 +10,8 @@ class ReadConfig:
         if filepath:
             self.configpath = filepath
         else:
-            root_dir = os.path.dirname(os.path.abspath('.'))
-            # root_dir = 'd://bishe'
-
+            # root_dir = os.path.dirname(os.path.abspath('.'))
+            root_dir = 'e://bishe'
             self.configpath = os.path.join(root_dir, "config.ini")
         self.cf = configparser.ConfigParser()
         self.cf.read(self.configpath)
@@ -29,9 +29,10 @@ class ReadConfig:
 
 
 
-if __name__ == '__main__':
-    a = ReadConfig()
-    print(a.get('test_config', 'ip'))
+# if __name__ == '__main__':
+#     a = ReadConfig()
+#     print(a.get('test_config', 'ip'))
+#     a.set('test_config', 'temp', '44445')
 
 
 class myth(QThread):
@@ -43,7 +44,20 @@ class myth(QThread):
 
     def run(self):
         a = ReadConfig()
-        b = a.get(*self.param)
+        b = []
+        if self.param == ('test_all',):
+            b.append(a.get('test_config','ip'))
+            b.append(a.get('test_config','centerf'))
+            b.append(a.get('test_config','span'))
+            b.append(a.get('test_config', 'ifband'))
+            b.append(a.get('test_config','temp'))
+            b.append(a.get('test_config','averages'))
+            b.append(a.get('test_config', 'power'))
+            b.append(a.get('test_config', 'edelay'))
+            b.append(a.get('test_config', 'points'))
+            b.append(a.get('test_config', 'outputfile'))
+        else:
+            b.append(a.get(*self.param))
         self.myOut.emit(b)
 
 
