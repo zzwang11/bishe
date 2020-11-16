@@ -36,7 +36,7 @@ class ReadConfig:
 
 
 class myth(QThread):
-    myOut = pyqtSignal(str)
+    myOut = pyqtSignal(list)
 
     def __init__(self, *param):
         super().__init__()
@@ -46,17 +46,29 @@ class myth(QThread):
         a = ReadConfig()
         b = []
         if self.param == ('test_all',):
-            b.append(a.get('test_config','ip'))
-            b.append(a.get('test_config','centerf'))
-            b.append(a.get('test_config','span'))
-            b.append(a.get('test_config', 'ifband'))
-            b.append(a.get('test_config','temp'))
-            b.append(a.get('test_config','averages'))
-            b.append(a.get('test_config', 'power'))
-            b.append(a.get('test_config', 'edelay'))
-            b.append(a.get('test_config', 'points'))
-            b.append(a.get('test_config', 'outputfile'))
+            print(111)
+            ip = a.get('test_config', 'ip')
+            centerf = a.get('test_config', 'centerf')
+            span = a.get('test_config', 'span')
+            ifband = a.get('test_config', 'ifband')
+            temp = a.get('test_config', 'temp')
+            averages = a.get('test_config', 'averages')
+            power = a.get('test_config', 'power')
+            edelay = a.get('test_config', 'edelay')
+            points = a.get('test_config', 'points')
+            outputfile = a.get('test_config', 'outputfile')
+            b.append(ip)
+            b.append(centerf)
+            b.append(span)
+            b.append(ifband)
+            b.append(temp)
+            b.append(averages)
+            b.append(power)
+            b.append(edelay)
+            b.append(points)
+            b.append(outputfile)
         else:
+            print(2222)
             b.append(a.get(*self.param))
         self.myOut.emit(b)
 

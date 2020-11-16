@@ -111,15 +111,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
     def set_text(self,a):
         self.LineEdit.setText(a[0])
-        # self.LineEdit_2.setText(a[1])
-        # self.LineEdit_3.setText(a[2])
-        # self.LineEdit_4.setText(a[3])
-        # self.LineEdit_5.setText(a[4])
-        # self.LineEdit_6.setText(a[5])
-        # self.LineEdit_7.setText(a[6])
-        # self.LineEdit_8.setText(a[7])
-        # self.LineEdit_9.setText(a[8])
-        # self.LineEdit_10.setText(a[9])
+        self.LineEdit_2.setText(a[1])
+        self.LineEdit_3.setText(a[2])
+        self.LineEdit_4.setText(a[3])
+        self.LineEdit_5.setText(a[4])
+        self.LineEdit_6.setText(a[5])
+        self.LineEdit_7.setText(a[6])
+        self.LineEdit_8.setText(a[7])
+        self.LineEdit_9.setText(a[8])
+        self.LineEdit_10.setText(a[9])
 
 
     def fail_dialog(self):
