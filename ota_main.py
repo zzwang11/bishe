@@ -27,9 +27,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_2.clicked.connect(self.pause)
         self.pushButton_3.clicked.connect(self.terminate_m)
         self.pushButton_4.clicked.connect(self.go_on)
-        self.pushButton_5.clicked.connect(QCoreApplication.instance().quit)
+
         self.pushButton_6.clicked.connect(self.writeconf)
-        self.pushButton_7.clicked.connect(self.go_on)
+        self.pushButton_7.clicked.connect(self.readconf)
         self.actionconnect.triggered.connect(self.con_pic)
         self.action5.triggered.connect(QCoreApplication.instance().quit)
         self.actionhelp.triggered.connect(self.helppage)
@@ -73,8 +73,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
     def terminate_m(self):
         self.thread1.terminate()
         self.thread1.wait()
-        print(QThread.currentThread())
-        # del self.thread1
         self.pushButton.setEnabled(True)
 
     def writeconf(self):
