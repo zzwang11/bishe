@@ -17,38 +17,26 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         super(MyMainWindow, self).__init__(parent)
         self.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
         self.setupUi(self)
-        # self.preset()
+        self.preSet()
 
 
 
 
+
+        self.pushButton.clicked.connect(self.measure)
+        self.pushButton_2.clicked.connect(self.pause)
+        self.pushButton_3.clicked.connect(self.terminate_m)
+        self.pushButton_4.clicked.connect(self.go_on)
         self.pushButton_5.clicked.connect(QCoreApplication.instance().quit)
-        # self.pushButton.clicked.connect(self.measure)
-        self.pushButton.clicked.connect(self.readconf)
-        # self.pushButton_2.clicked.connect(self.pause)
-        self.pushButton_2.clicked.connect(self.writeconf)
-        # self.pushButton_3.clicked.connect(self.terminate_m)
-        self.pushButton_3.clicked.connect(self.readline)
+        self.pushButton_6.clicked.connect(self.writeconf)
+        self.pushButton_7.clicked.connect(self.go_on)
         self.actionconnect.triggered.connect(self.con_pic)
         self.action5.triggered.connect(QCoreApplication.instance().quit)
         self.actionhelp.triggered.connect(self.helppage)
-        self.pushButton_6.clicked.connect(self.writeconf)
-        self.pushButton_7.clicked.connect(self.go_on)
 
-
-
-
-    def readline(self):
-        c = self.LineEdit_2.text()
-        print(type(c))
-        print(len(c))
-        print(self.LineEdit_2.text(),'aaaa',123)
-
-    # def preset(self):
-
+    def preSet(self):
         # self.LineEdit.setInputMask('999.999.999.999;_')
-
-        # self.readconf()
+        self.readconf()
 
     def save_file(self):
         save_path, ok2 = QFileDialog.getSaveFileName(None, "文件保存", "./", "All Files (*);;Text Files (*.txt)")
@@ -63,9 +51,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.a.show()
 
     def helppage(self):
-        self.a = helpPage.mainwindow()
-        self.a.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
-        self.a.show()
+        self.help_page = helpPage.mainwindow()
+        self.help_page.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
+        self.help_page.show()
 
     def measure(self):
         # thread_exa = suit_cla()
@@ -80,7 +68,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
 
     def go_on(self):
-        self.thread1.start()
+        self.thread1.goon()
 
     def terminate_m(self):
         self.thread1.terminate()
@@ -100,7 +88,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         edelay = self.LineEdit_7.text()
         points = self.LineEdit_8.text()
         outputfile = self.LineEdit_9.text()
-
         self.wr = write_conf.writeThread(IP, centerf, span, temp, averages, power, edelay, ifband, points, outputfile)
         self.wr.start()
 
@@ -121,17 +108,14 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.LineEdit_9.setText(a[8])
         self.LineEdit_10.setText(a[9])
 
-
     def fail_dialog(self):
-        fail_dialog(self,'shibai','you fail')
-
+        warning_dialog(self,'shibai','you fail')
 
     def succ_dialog(self):
-        success_dialog(self, 'cheng gong', 'you success')
+        information_dialog(self, 'cheng gong', 'you success')
 
     # QApplication.processEvents()实现页面刷新
-    def calculate(self):
-        print('aaa')
+
 
 
 

@@ -16,8 +16,12 @@ class myThread(QThread):
 
     def pause(self):
         self.flag = True
-    def run(self):
 
+    def goon(self):
+        self.flag = False
+        condi.wakeAll()
+
+    def run(self):
         i = 1
         while self.working:
             i += 1
@@ -25,7 +29,7 @@ class myThread(QThread):
             print(i)
             with open('./save/1.txt','a') as f:
                 f.write('hahaha\n')
-            if(self.flag):
+            if self.flag:
                 qmute.lock()
                 condi.wait(qmute)
                 qmute.unlock()
