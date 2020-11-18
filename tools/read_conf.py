@@ -10,8 +10,7 @@ class ReadConfig:
         if filepath:
             self.configpath = filepath
         else:
-            # root_dir = os.path.dirname(os.path.abspath('.'))
-            root_dir = 'e://bishe'
+            root_dir = os.path.abspath('.')
             self.configpath = os.path.join(root_dir, "config.ini")
         self.cf = configparser.ConfigParser()
         self.cf.read(self.configpath)
@@ -28,14 +27,7 @@ class ReadConfig:
         self.cf.write(open(self.configpath,'w'))
 
 
-
-# if __name__ == '__main__':
-#     a = ReadConfig()
-#     print(a.get('test_config', 'ip'))
-#     a.set('test_config', 'temp', '44445')
-
-
-class myth(QThread):
+class MyTh(QThread):
     myOut = pyqtSignal(list)
 
     def __init__(self, *param):
@@ -68,7 +60,6 @@ class myth(QThread):
             b.append(points)
             b.append(outputfile)
         else:
-            print(2222)
             b.append(a.get(*self.param))
         self.myOut.emit(b)
 

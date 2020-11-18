@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QStatusBar
 from mywidget.MainWindow import Ui_MainWindow
 from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread,QWaitCondition
 from PyQt5 import QtGui
@@ -16,20 +16,30 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MyMainWindow, self).__init__(parent)
         self.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
+
         self.setupUi(self)
+        self.statusBar = QStatusBar()
+        self.setStatusBar(self.statusBar)
+        self.statusBar.resize(200,30)
+        self.statusBar.showMessage('123456',10000)
         self.preSet()
 
 
 
 
 
+
+        # 实现测量开始、暂停、继续、停止
         self.pushButton.clicked.connect(self.measure)
         self.pushButton_2.clicked.connect(self.pause)
         self.pushButton_3.clicked.connect(self.terminate_m)
         self.pushButton_4.clicked.connect(self.go_on)
 
+        # 实现测量所需数据的保存和读取
         self.pushButton_6.clicked.connect(self.writeconf)
         self.pushButton_7.clicked.connect(self.readconf)
+
+
         self.actionconnect.triggered.connect(self.con_pic)
         self.action5.triggered.connect(QCoreApplication.instance().quit)
         self.actionhelp.triggered.connect(self.helppage)
@@ -40,7 +50,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
     def save_file(self):
         save_path, ok2 = QFileDialog.getSaveFileName(None, "文件保存", "./", "All Files (*);;Text Files (*.txt)")
-        print(save_path)
         if save_path:
             with open(file=save_path, mode='a+', encoding='utf-8') as file:
                 file.write('wen jian')
@@ -58,6 +67,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
     def measure(self):
         # thread_exa = suit_cla()
         # thread_exa.start()
+        self.statusBar.showMessage('测量中......',10**8)
         self.pushButton.setEnabled(False)
         self.thread1 = myThread()
         self.thread1.start()
@@ -65,15 +75,18 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
     def pause(self):
         self.thread1.pause()
+        self.statusBar.showMessage('暂停测量',10**8)
 
 
     def go_on(self):
         self.thread1.goon()
+        self.statusBar.showMessage('测量中......',10**8)
 
     def terminate_m(self):
         self.thread1.terminate()
         self.thread1.wait()
         self.pushButton.setEnabled(True)
+        self.statusBar.showMessage('测量结束！',10**8)
 
     def writeconf(self):
         IP = self.LineEdit.text()
@@ -83,16 +96,18 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         temp = self.LineEdit_5.text()
         averages = self.LineEdit_6.text()
         power = self.LineEdit_7.text()
-        edelay = self.LineEdit_7.text()
-        points = self.LineEdit_8.text()
-        outputfile = self.LineEdit_9.text()
+        edelay = self.LineEdit_8.text()
+        points = self.LineEdit_9.text()
+        outputfile = self.LineEdit_10.text()
         self.wr = write_conf.writeThread(IP, centerf, span, temp, averages, power, edelay, ifband, points, outputfile)
         self.wr.start()
+        self.statusBar.showMessage('保存配置成功！',10**5)
 
     def readconf(self):
-        self.rd = read_conf.myth('test_all')
+        self.rd = read_conf.MyTh('test_all')
         self.rd.myOut.connect(self.set_text)
         self.rd.start()
+        self.statusBar.showMessage('从本地读取配置成功', 10**8)
 
     def set_text(self,a):
         self.LineEdit.setText(a[0])

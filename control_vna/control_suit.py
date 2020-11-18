@@ -1,13 +1,18 @@
 from control_vna.control import getdata
 from tools.read_conf import ReadConfig
-from PyQt5.QtCore import QThread,QMutex,QWaitCondition
+from PyQt5.QtCore import QThread,QMutex,QWaitCondition,pyqtSignal
 
 qmute = QMutex()
 condi = QWaitCondition()
+
+
 class suit_cla(QThread):
+    mySig = pyqtSignal(int)
+
     def __init__(self):
         super().__init__()
         self.flag = False
+
     def run(self):
         conf = ReadConfig()
         ip = conf.get('test_config','ip')
@@ -40,9 +45,14 @@ class suit_cla(QThread):
                 file_list.append(getdata(inst, centerf, span, temp, averages, power, edelay, ifband, points, outputfile))
             except:
                 errormsg = 1
+        self.mySig.emit(errormsg)
 
     def pause(self):
         self.flag = True
+
+    def goon(self):
+        self.flag = False
+        condi.wakeOne()
 
 
 
