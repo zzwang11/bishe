@@ -1,7 +1,7 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QStatusBar
-from mywidget.MainWindow import Ui_MainWindow
-from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread,QWaitCondition
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QStatusBar, QSplitter
+from mywidget.MainWindowT import Ui_MainWindow
+from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread,QWaitCondition,Qt
 from PyQt5 import QtGui
 from mywidget import connectPic, helpPage
 from tools import write_conf,read_conf
@@ -9,6 +9,8 @@ from dialog_util.dialogUtil import *
 from control_vna.control_suit import suit_cla
 from thread_exa.wait_thread import myThread
 import time
+import pyqtgraph as pg
+import numpy as np
 
 
 class MyMainWindow(QMainWindow, Ui_MainWindow):
@@ -18,12 +20,20 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
 
         self.setupUi(self)
+        # 状态栏
         self.statusBar = QStatusBar()
         self.setStatusBar(self.statusBar)
-        self.statusBar.resize(200,30)
         self.statusBar.showMessage('123456',10000)
         self.preSet()
-
+        # self.qss()
+        self.pushButton_5.setStyleSheet('''QPushButton{background:rgb(100,149,237);border-radius:15px;}\
+        QPushButton:hover{background:rgb(65,105,225);border-radius:15px;}''')
+        # self.split = QSplitter(Qt.Horizontal)
+        # self.split.addWidget(self.)
+        # pg.setConfigOption('background', '#F8F8FF')
+        # pg.setConfigOption('foreground', 'd')
+        self.pyqtgraph1.setBackground('#F8F8FF')
+        self.draw1()
 
 
 
@@ -44,9 +54,24 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.action5.triggered.connect(QCoreApplication.instance().quit)
         self.actionhelp.triggered.connect(self.helppage)
 
+    def draw1(self):
+        self.pyqtgraph1.clear()
+
+
+        '''第二种绘图方式'''
+        plt2 = self.pyqtgraph1.addPlot(title='绘制多条线')
+
+        plt2.plot(np.random.normal(size=150), pen=pg.mkPen(color='r', width=2),
+                  name="Red curve")
+        plt2.plot(np.random.normal(size=110) + 5, pen=(0, 255, 0), name="Green curve")
+        plt2.plot(np.random.normal(size=120) + 10, pen=(0, 0, 255), name="Blue curve")
+
     def preSet(self):
         # self.LineEdit.setInputMask('999.999.999.999;_')
         self.readconf()
+    #
+    # def qss(self):
+
 
     def save_file(self):
         save_path, ok2 = QFileDialog.getSaveFileName(None, "文件保存", "./", "All Files (*);;Text Files (*.txt)")
@@ -77,7 +102,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.thread1.pause()
         self.statusBar.showMessage('暂停测量',10**8)
 
-
     def go_on(self):
         self.thread1.goon()
         self.statusBar.showMessage('测量中......',10**8)
@@ -107,7 +131,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.rd = read_conf.MyTh('test_all')
         self.rd.myOut.connect(self.set_text)
         self.rd.start()
-        self.statusBar.showMessage('从本地读取配置成功', 10**8)
+        self.statusBar.showMessage('从本地读取配置成功', 10**4)
 
     def set_text(self,a):
         self.LineEdit.setText(a[0])

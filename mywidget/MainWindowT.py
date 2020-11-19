@@ -8,7 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from pyqtgraph import GraphicsLayoutWidget
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -16,13 +16,16 @@ class Ui_MainWindow(object):
         MainWindow.resize(1018, 673)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        self.pyqtgraph1 = GraphicsLayoutWidget(self.centralwidget)
+        self.pyqtgraph1.setGeometry(QtCore.QRect(21, 21, 581, 450))
+        self.pyqtgraph1.setObjectName("pyqtgraph1")
         self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
         self.progressBar.setGeometry(QtCore.QRect(20, 490, 611, 20))
         self.progressBar.setProperty("value", 24)
         self.progressBar.setObjectName("progressBar")
-        self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
-        self.graphicsView.setGeometry(QtCore.QRect(21, 21, 581, 451))
-        self.graphicsView.setObjectName("graphicsView")
+        # self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
+        # self.graphicsView.setGeometry(QtCore.QRect(21, 21, 581, 451))
+        # self.graphicsView.setObjectName("graphicsView")
         self.formGroupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.formGroupBox.setGeometry(QtCore.QRect(660, 20, 321, 461))
         self.formGroupBox.setObjectName("formGroupBox")
@@ -247,8 +250,9 @@ class Ui_MainWindow(object):
         MainWindow.setTabOrder(self.LineEdit_9, self.LineEdit_10)
         MainWindow.setTabOrder(self.LineEdit_10, self.pushButton_6)
         MainWindow.setTabOrder(self.pushButton_6, self.pushButton_7)
-        MainWindow.setTabOrder(self.pushButton_7, self.graphicsView)
-        MainWindow.setTabOrder(self.graphicsView, self.pushButton)
+        # MainWindow.setTabOrder(self.pushButton_7, self.graphicsView)
+        # MainWindow.setTabOrder(self.graphicsView, self.pushButton)
+        MainWindow.setTabOrder(self.pushButton_7, self.pushButton)
         MainWindow.setTabOrder(self.pushButton, self.pushButton_2)
         MainWindow.setTabOrder(self.pushButton_2, self.pushButton_3)
 

@@ -23,8 +23,13 @@ class ReadConfig:
         return value
 
     def set(self, *param):
-        self.cf.set(*param)
-        self.cf.write(open(self.configpath,'w'))
+        try:
+            self.cf.set(*param)
+            self.cf.write(open(self.configpath,'w'))
+            a = 0
+        except:
+            a = "写入失败"
+        return a
 
 
 class MyTh(QThread):
@@ -38,7 +43,6 @@ class MyTh(QThread):
         a = ReadConfig()
         b = []
         if self.param == ('test_all',):
-            print(111)
             ip = a.get('test_config', 'ip')
             centerf = a.get('test_config', 'centerf')
             span = a.get('test_config', 'span')
