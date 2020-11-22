@@ -11,6 +11,7 @@ from thread_exa.wait_thread import myThread
 import time
 import pyqtgraph as pg
 import numpy as np
+import math
 
 
 class MyMainWindow(QMainWindow, Ui_MainWindow):
@@ -56,11 +57,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
     def draw1(self):
         self.pyqtgraph1.clear()
-
-
-        '''第二种绘图方式'''
         plt2 = self.pyqtgraph1.addPlot(title='绘制多条线')
-
         plt2.plot(np.random.normal(size=150), pen=pg.mkPen(color='r', width=2),
                   name="Red curve")
         plt2.plot(np.random.normal(size=110) + 5, pen=(0, 255, 0), name="Green curve")

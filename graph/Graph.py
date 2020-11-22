@@ -26,7 +26,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.setupUi(self)
         self.draw1()
-        # self.draw2()
+        self.draw2()
 
 
     def draw1(self):
