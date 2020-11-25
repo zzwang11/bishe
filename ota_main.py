@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QStatusBar, QSplitter
 from mywidget.MainWindowT import Ui_MainWindow
 from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread,QWaitCondition,Qt
-from PyQt5 import QtGui
+from PyQt5 import QtGui,QtCore
 from mywidget import connectPic, helpPage
 from tools import write_conf,read_conf
 from dialog_util.dialogUtil import *
@@ -10,6 +10,7 @@ from control_vna.control_suit import suit_cla
 from thread_exa.wait_thread import myThread
 import time
 import pyqtgraph as pg
+import pyqtgraph.opengl as gl
 import numpy as np
 import math
 
@@ -29,14 +30,32 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         # self.qss()
         self.pushButton_5.setStyleSheet('''QPushButton{background:rgb(100,149,237);border-radius:15px;}\
         QPushButton:hover{background:rgb(65,105,225);border-radius:15px;}''')
-        # self.split = QSplitter(Qt.Horizontal)
-        # self.split.addWidget(self.)
+
         # pg.setConfigOption('background', '#F8F8FF')
         # pg.setConfigOption('foreground', 'd')
-        self.pyqtgraph1.setBackground('#F8F8FF')
-        self.draw1()
 
 
+        # 二维图
+        # self.pyqtgraph1 = pg.GraphicsLayoutWidget(self.centralwidget)
+        # # self.pyqtgraph1.setGeometry(QtCore.QRect(21, 21, 581, 450))
+        # self.pyqtgraph1.setObjectName("pyqtgraph1")
+        # self.pyqtgraph1.setBackground('#F8F8FF')
+        # self.gridLayout_2.addWidget(self.pyqtgraph1,0,0,1,1)
+        # self.draw1()
+        # 三维图
+        def fn(x, y):
+            return np.cos((x ** 2 + y ** 2) ** 0.5)
+
+        n = 51
+        y = np.linspace(-10, 10, n)
+        x = np.linspace(-10, 10, 100)
+        for i in range(n):
+            yi = np.array([y[i]] * 100)
+            d = (x ** 2 + yi ** 2) ** 0.5
+            z = 10 * np.cos(d) / (d + 1)
+            pts = np.vstack([x, yi, z]).transpose()
+            plt = gl.GLLinePlotItem(pos=pts, color=pg.glColor((i, n * 1.3)), width=(i + 1) / 10., antialias=True)
+            self.graph.addItem(plt)
 
 
 
@@ -62,6 +81,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
                   name="Red curve")
         plt2.plot(np.random.normal(size=110) + 5, pen=(0, 255, 0), name="Green curve")
         plt2.plot(np.random.normal(size=120) + 10, pen=(0, 0, 255), name="Blue curve")
+
+
+
 
     def preSet(self):
         # self.LineEdit.setInputMask('999.999.999.999;_')
@@ -149,7 +171,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         information_dialog(self, 'cheng gong', 'you success')
 
     # QApplication.processEvents()实现页面刷新
-
 
 
 

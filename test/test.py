@@ -33,64 +33,92 @@
 #
 # read('test_config','ip')
 
-'''
+# '''
+#
+# 绘制不同类型的直线
+#
+#
+#
+# '''
+#
+# import sys,math
+# from PyQt5.QtWidgets import *
+# from PyQt5.QtGui import *
+# from PyQt5.QtCore import Qt
+#
+# class DrawMultiLine(QWidget):
+#     def __init__(self):
+#         super(DrawMultiLine,self).__init__()
+#         self.resize(300,300)
+#         self.setWindowTitle('设置Pen的样式')
+#
+#     def paintEvent(self, event):
+#         painter = QPainter()
+#         painter.begin(self)
+#
+#
+#         pen = QPen(Qt.red,3,Qt.SolidLine)
+#
+#         painter.setPen(pen)
+#         painter.drawLine(20,40,250,40)
+#
+#         pen.setStyle(Qt.DashLine)
+#         painter.setPen(pen)
+#         painter.drawLine(20, 80, 250, 80)
+#
+#         pen.setStyle(Qt.DashDotDotLine)
+#         painter.setPen(pen)
+#         painter.drawLine(20, 120, 250, 120)
+#
+#         pen.setStyle(Qt.DotLine)
+#         painter.setPen(pen)
+#         painter.drawLine(20, 160, 250, 160)
+#
+#         pen.setStyle(Qt.DashDotDotLine)
+#         painter.setPen(pen)
+#         painter.drawLine(20, 200, 250, 200)
+#
+#         pen.setStyle(Qt.CustomDashLine)
+#         pen.setDashPattern([1,10,5,8])
+#         painter.setPen(pen)
+#         painter.drawLine(20, 240, 250, 240)
+#
+#
+#         size = self.size()
+#
+#
+#
+#         painter.end()
+# if __name__ == '__main__':
+#     app = QApplication(sys.argv)
+#     main = DrawMultiLine()
+#     main.show()
+#     sys.exit(app.exec_())
 
-绘制不同类型的直线
-
-
-
-'''
-
-import sys,math
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import Qt
-
-class DrawMultiLine(QWidget):
-    def __init__(self):
-        super(DrawMultiLine,self).__init__()
-        self.resize(300,300)
-        self.setWindowTitle('设置Pen的样式')
-
-    def paintEvent(self, event):
-        painter = QPainter()
-        painter.begin(self)
-
-
-        pen = QPen(Qt.red,3,Qt.SolidLine)
-
-        painter.setPen(pen)
-        painter.drawLine(20,40,250,40)
-
-        pen.setStyle(Qt.DashLine)
-        painter.setPen(pen)
-        painter.drawLine(20, 80, 250, 80)
-
-        pen.setStyle(Qt.DashDotDotLine)
-        painter.setPen(pen)
-        painter.drawLine(20, 120, 250, 120)
-
-        pen.setStyle(Qt.DotLine)
-        painter.setPen(pen)
-        painter.drawLine(20, 160, 250, 160)
-
-        pen.setStyle(Qt.DashDotDotLine)
-        painter.setPen(pen)
-        painter.drawLine(20, 200, 250, 200)
-
-        pen.setStyle(Qt.CustomDashLine)
-        pen.setDashPattern([1,10,5,8])
-        painter.setPen(pen)
-        painter.drawLine(20, 240, 250, 240)
-
-
-        size = self.size()
-
-
-
-        painter.end()
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    main = DrawMultiLine()
-    main.show()
-    sys.exit(app.exec_())
+# from pyqtgraph.Qt import QtCore, QtGui
+# import pyqtgraph as pg
+# import scipy.ndimage as ndi
+# import numpy as np
+#
+# Nf = 90     # No. of frames
+# Ns = 100    # Signal length
+#
+# app = QtGui.QApplication([])
+#
+# Arx = np.zeros([Nf, Ns])
+# win = pg.image(Arx)
+# win.view.setAspectLocked()
+# def update():
+#     global Arx
+#     Arx = np.roll(Arx, 1, axis=0)
+#     Arx[0] = ndi.gaussian_filter(np.random.normal(size=(1,Ns)), (1, 1))
+#     win.setImage(Arx.T, autoRange=False)
+#
+# timer = QtCore.QTimer()
+# timer.timeout.connect(update)
+# timer.start(30)
+#
+# if __name__ == '__main__':
+#     import sys
+#     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
+#         QtGui.QApplication.instance().exec_()
