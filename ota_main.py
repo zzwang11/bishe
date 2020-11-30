@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QStatusBar, QSplitter
-from mywidget.MainWindowT import Ui_MainWindow
+from mywidget.MainWindowN import Ui_MainWindow
 from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread,QWaitCondition,Qt
 from PyQt5 import QtGui,QtCore
 from mywidget import connectPic, helpPage
@@ -12,7 +12,9 @@ import time
 import pyqtgraph as pg
 import pyqtgraph.opengl as gl
 import numpy as np
+import tools.setcon
 import math
+import matplotlib.pyplot as plt
 
 
 class MyMainWindow(QMainWindow, Ui_MainWindow):
@@ -22,40 +24,40 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
 
         self.setupUi(self)
+        # self.setconf()
         # 状态栏
         self.statusBar = QStatusBar()
         self.setStatusBar(self.statusBar)
         self.statusBar.showMessage('123456',10000)
         self.preSet()
-        # self.qss()
-        self.pushButton_5.setStyleSheet('''QPushButton{background:rgb(100,149,237);border-radius:15px;}\
-        QPushButton:hover{background:rgb(65,105,225);border-radius:15px;}''')
+        self.qss()
+        # 二维
+        self.pyqtgraph1 = pg.GraphicsLayoutWidget(self.centralwidget)
+        self.pyqtgraph1.setObjectName("pyqtgraph1")
+        self.pyqtgraph1.setBackground('#F8F8FF')
+        self.gridLayout_2.addWidget(self.pyqtgraph1, 0, 0, 1, 1)
+        self.plt2 = self.pyqtgraph1.addPlot(title='绘制多条线')
 
-        # pg.setConfigOption('background', '#F8F8FF')
-        # pg.setConfigOption('foreground', 'd')
-
-
-        # 二维图
-        # self.pyqtgraph1 = pg.GraphicsLayoutWidget(self.centralwidget)
-        # # self.pyqtgraph1.setGeometry(QtCore.QRect(21, 21, 581, 450))
-        # self.pyqtgraph1.setObjectName("pyqtgraph1")
-        # self.pyqtgraph1.setBackground('#F8F8FF')
-        # self.gridLayout_2.addWidget(self.pyqtgraph1,0,0,1,1)
-        # self.draw1()
         # 三维图
-        def fn(x, y):
-            return np.cos((x ** 2 + y ** 2) ** 0.5)
-
-        n = 51
-        y = np.linspace(-10, 10, n)
-        x = np.linspace(-10, 10, 100)
-        for i in range(n):
-            yi = np.array([y[i]] * 100)
-            d = (x ** 2 + yi ** 2) ** 0.5
-            z = 10 * np.cos(d) / (d + 1)
-            pts = np.vstack([x, yi, z]).transpose()
-            plt = gl.GLLinePlotItem(pos=pts, color=pg.glColor((i, n * 1.3)), width=(i + 1) / 10., antialias=True)
-            self.graph.addItem(plt)
+        # self.graph = gl.GLViewWidget(self.centralwidget)
+        # self.graph.setObjectName("graph")
+        # self.graph.setBackgroundColor(QtGui.QColor('white'))
+        # self.graph.opts['distance'] = 40
+        # self.gx = gl.GLGridItem()
+        # self.gx.rotate(90, 0, 1, 0)
+        # self.gx.translate(-10, 0, 0)
+        # self.gx.setColor(QtGui.QColor('black'))
+        # self.graph.addItem(self.gx)
+        # self.gy = gl.GLGridItem()
+        # self.gy.rotate(90, 1, 0, 0)
+        # self.gy.translate(0, -10, 0)
+        # self.gy.setColor(QtGui.QColor('black'))
+        # self.graph.addItem(self.gy)
+        # self.gz = gl.GLGridItem()
+        # self.gz.translate(0, 0, -10)
+        # self.gz.setColor(QtGui.QColor('black'))
+        # self.graph.addItem(self.gz)
+        # self.gridLayout_2.addWidget(self.graph, 0, 0, 1, 1)
 
 
 
@@ -68,35 +70,20 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         # 实现测量所需数据的保存和读取
         self.pushButton_6.clicked.connect(self.writeconf)
         self.pushButton_7.clicked.connect(self.readconf)
-
-
         self.actionconnect.triggered.connect(self.con_pic)
         self.action5.triggered.connect(QCoreApplication.instance().quit)
         self.actionhelp.triggered.connect(self.helppage)
 
-    def draw1(self):
-        self.pyqtgraph1.clear()
-        plt2 = self.pyqtgraph1.addPlot(title='绘制多条线')
-        plt2.plot(np.random.normal(size=150), pen=pg.mkPen(color='r', width=2),
-                  name="Red curve")
-        plt2.plot(np.random.normal(size=110) + 5, pen=(0, 255, 0), name="Green curve")
-        plt2.plot(np.random.normal(size=120) + 10, pen=(0, 0, 255), name="Blue curve")
+    def set_3d(self):
+        tools.setcon.pic_3d(self)
 
-
-
+    def set_2d(self):
+        tools.setcon.pic_2d(self)
 
     def preSet(self):
         # self.LineEdit.setInputMask('999.999.999.999;_')
         self.readconf()
-    #
-    # def qss(self):
 
-
-    def save_file(self):
-        save_path, ok2 = QFileDialog.getSaveFileName(None, "文件保存", "./", "All Files (*);;Text Files (*.txt)")
-        if save_path:
-            with open(file=save_path, mode='a+', encoding='utf-8') as file:
-                file.write('wen jian')
 
     def con_pic(self):
         self.a = connectPic.picture()
@@ -108,18 +95,32 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.help_page.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
         self.help_page.show()
 
+
     def measure(self):
-        # thread_exa = suit_cla()
-        # thread_exa.start()
+        # self.thread_exa = suit_cla()
+        # self.thread_exa.start()
+        # self.thread_exa.mySig.connect(self.bar)
+
+
+
         self.statusBar.showMessage('测量中......',10**8)
         self.pushButton.setEnabled(False)
         self.thread1 = myThread()
         self.thread1.start()
-        # print(QThread.currentThread())
+        # self.graph.close()
+        # self.thread1.mySig.connect(lambda i:self.progressBar.setValue(i))
+        self.thread1.mySig.connect(self.settext)
+
+    def settext(self,a):
+        self.progressBar.setValue(a*10)
+        # x = np.linspace(0,20,200)
+        # n = np.sin(a*x)
+        # self.plt2.plot(y = n,pen=(a*10,255,0))
 
     def pause(self):
         self.thread1.pause()
         self.statusBar.showMessage('暂停测量',10**8)
+        # self.graph.show()
 
     def go_on(self):
         self.thread1.goon()
@@ -170,6 +171,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
     def succ_dialog(self):
         information_dialog(self, 'cheng gong', 'you success')
 
+    def qss(self):
+        self.pushButton_5.setStyleSheet('''QPushButton{background:rgb(100,149,237);border-radius:15px;}\
+        QPushButton:hover{background:rgb(65,105,225);border-radius:15px;}''')
     # QApplication.processEvents()实现页面刷新
 
 

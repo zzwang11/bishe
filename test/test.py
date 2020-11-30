@@ -122,3 +122,35 @@
 #     import sys
 #     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
 #         QtGui.QApplication.instance().exec_()
+
+# import time
+# # a = (i for i in range(1,10,1))
+# a = [i for i in range(10)]
+# i = 0
+# while True:
+#     print(a[i])
+#     i += 1
+#     if i>9:
+#         i = 0
+#     time.sleep(0.5)
+#     d = time.time()
+#
+#     b = str(d)[10:14]
+#     print(time.strftime("%H:%M:%S",time.localtime()),end='')
+#     print(str(b))
+import sys
+
+ss = 1
+print(sys.getsizeof(ss))
+with open("../save/1.txt",'r') as f:
+    a = f.readline()
+    while a:
+
+        print(a)
+        print(sys.getsizeof(a))
+        a = f.readline()
+    # # b = a.split()
+    # c = f.readlines(7)
+    # print(c)
+    # # print(b)
+    # # print(type(a))

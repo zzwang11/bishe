@@ -1,7 +1,7 @@
 from control_vna.control import getdata
 from tools.read_conf import ReadConfig
 from PyQt5.QtCore import QThread,QMutex,QWaitCondition,pyqtSignal
-
+import math
 qmute = QMutex()
 condi = QWaitCondition()
 
@@ -30,7 +30,9 @@ class suit_cla(QThread):
         errormsg = 0
         if span > 200:
             ad = centerf-span/2
+            j = 0
             while ad<centerf+span/2:
+
                 if self.flag:
                     qmute.lock()
                     condi.wait(qmute)
@@ -40,12 +42,16 @@ class suit_cla(QThread):
                 except:
                     errormsg = 1
                 ad += 200
+                j = j+200
+                i = math.floor((j/span)*100)
+                self.mySig.emit(i)
+            self.mySig.emit(100)
         else:
             try:
                 file_list.append(getdata(inst, centerf, span, temp, averages, power, edelay, ifband, points, outputfile))
             except:
                 errormsg = 1
-        self.mySig.emit(errormsg)
+
 
     def pause(self):
         self.flag = True

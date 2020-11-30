@@ -17,14 +17,23 @@ app = QtGui.QApplication([])
 w = gl.GLViewWidget()
 w.show()
 w.setWindowTitle('pyqtgraph example: GLSurfacePlot')
-w.setCameraPosition(distance=150)
+w.setCameraPosition(distance=300)
 
 ## Add a grid to the view
 g = gl.GLGridItem()
-g.setSize(10,10,10)
+g.setSize(10,10,1)
 g.scale(20, 20, 1)
 g.setDepthValue(100)  # draw grid after surfaces since they may be translucent
 w.addItem(g)
+
+wave = pg.PlotWidget(QtGui.QColor(0, 0, 0, 0))
+wave.plot([1,2,3], [1,2,1], pen=(0,0,255), fillLevel=-0, brush=(255,215,0))
+w.addItem(wave)
+a=gl.GLAxisItem()
+a.setSize(100,1,1)
+a.translate(0,0,10)
+w.addItem(a)
+
 
 ## Simple surface plot example
 ## x, y values are not specified, so assumed to be 0:50
@@ -71,25 +80,32 @@ w.addItem(g)
 ## create a surface plot, tell it to use the 'heightColor' shader
 ## since this does not require normal vectors to render (thus we
 ## can set computeNormals=False to save time when the mesh updates)
-y = np.linspace(0, 100, 10)
-print(y)
-x = np.linspace(0,100, 10)
-z = np.random.rand(len(x),len(y))*100
-print(z)
-cmap = plt.get_cmap('jet')
-minZ=np.min(z)
-maxZ=np.max(z)
-rgba_img = cmap((z-minZ)/(maxZ -minZ))
-p4 = gl.GLSurfacePlotItem(x=x,y=y,z=z,colors=rgba_img)
+# y = np.linspace(0, 100, 100)
+#
+# x = np.linspace(0,100, 100)
+# z = np.random.rand(len(x),len(y))*100
+#
+# cmap = plt.get_cmap('jet')
+# minZ=np.min(z)
+# maxZ=np.max(z)
+# rgba_img = cmap((z-minZ)/(maxZ -minZ))
+# p4 = gl.GLSurfacePlotItem(x=x,y=y,z=z,colors=rgba_img)
+#
+# # p4 = gl.GLSurfacePlotItem(x=x[:, 0], y=y[0, :], shader='heightColor', computeNormals=False, smooth=False)
+# # p4.shader()['colorMap'] = np.array([0.2, 2, 0.5, 0.2, 1, 1, 0.2, 0, 2])
+# # p4.shader()['colorMap'] = np.array([0.45, 0, 0.1, 0.005, 0.5, 2, 0, 0.05, 0.2])
+# p4.translate(10, 10, 0)
+# w.addItem(p4)
 
-# p4 = gl.GLSurfacePlotItem(x=x[:, 0], y=y[0, :], shader='heightColor', computeNormals=False, smooth=False)
-# p4.shader()['colorMap'] = np.array([0.2, 2, 0.5, 0.2, 1, 1, 0.2, 0, 2])
-# p4.shader()['colorMap'] = np.array([0.45, 0, 0.1, 0.005, 0.5, 2, 0, 0.05, 0.2])
-p4.translate(10, 10, 0)
-w.addItem(p4)
 
-index = 0
+zz = pg.gaussianFilter(np.zeros([200,200]), (1, 1))
 
+wang = gl.GLSurfacePlotItem(z=zz, color=(0.5, 0.5, 1, 1))
+wang.setGLOptions('translucent')
+wang.setDepthValue(1)
+wang.translate(-100, -100, 90)
+# self.wang.setColor(QtGui.QColor('black'))
+w.addItem(wang)
 
 # def update():
 #     global p4, z, index
