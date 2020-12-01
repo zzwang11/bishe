@@ -4,10 +4,11 @@ from mywidget.MainWindowT import Ui_MainWindow
 from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread,QWaitCondition,Qt
 from PyQt5 import QtGui,QtCore
 from mywidget import connectPic, helpPage
-from tools import write_conf,read_conf
+from tools import write_conf,read_conf,read_data
 from dialog_util.dialogUtil import *
 from control_vna.control_suit import suit_cla
 from thread_exa.wait_thread import myThread
+
 import time
 import pyqtgraph as pg
 import pyqtgraph.opengl as gl
@@ -31,14 +32,23 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.statusBar.showMessage('123456',10000)
         self.preSet()
         # self.qss()
+        # self.comboBox.addItem('1111')
+        # self.comboBox.addItem('2222')
+        # self.comboBox.currentTextChanged.connect(self.select_change)
+        # self.path = './save'
 
 
         # 二维
-        # self.pyqtgraph1 = pg.GraphicsLayoutWidget(self.centralwidget)
-        # self.pyqtgraph1.setObjectName("pyqtgraph1")
-        # self.pyqtgraph1.setBackground('#F8F8FF')
-        # self.gridLayout_2.addWidget(self.pyqtgraph1, 4, 0, 1, 1)
-        # self.plt2 = self.pyqtgraph1.addPlot(title='绘制多条线')
+        self.pyqtgraph1 = pg.GraphicsLayoutWidget(self.widget)
+        self.pyqtgraph1.setObjectName("pyqtgraph1")
+        self.pyqtgraph1.setBackground('#F8F8FF')
+        self.graphicsView.close()
+        self.verticalLayout.addWidget(self.pyqtgraph1)
+        ccc = [1,2,3,4,5,6]
+        ddd = [0.1,0.2,0.3,0.4,0.5,0.6]
+        self.plt2 = self.pyqtgraph1.addPlot(title='绘制多条线')
+        self.plt2.plot(ccc,ddd)
+
 
         # 三维图
         # self.graph = gl.GLViewWidget(self.centralwidget)
@@ -76,15 +86,20 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.action5.triggered.connect(QCoreApplication.instance().quit)
         self.actionhelp.triggered.connect(self.helppage)
 
-    def set_3d(self):
-        tools.setcon.pic_3d(self)
+    def set_3d(self,a):
+        tools.setcon.pic_3d(self,a)
 
-    def set_2d(self):
-        tools.setcon.pic_2d(self)
+    def set_2d(self,a):
+        tools.setcon.pic_2d(self,a)
 
     def preSet(self):
         # self.LineEdit.setInputMask('999.999.999.999;_')
         self.readconf()
+
+    def select_change(self,i):
+        self.read = read_data.MyRD(self.path,'1')
+        self.read.start()
+        self.read.myOut.connect(self.set_2d)
 
 
     def con_pic(self):
