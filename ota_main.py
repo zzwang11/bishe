@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QStatusBar, QSplitter
-from mywidget.MainWindowN import Ui_MainWindow
+from mywidget.MainWindowT import Ui_MainWindow
 from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread,QWaitCondition,Qt
 from PyQt5 import QtGui,QtCore
 from mywidget import connectPic, helpPage
@@ -30,13 +30,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.setStatusBar(self.statusBar)
         self.statusBar.showMessage('123456',10000)
         self.preSet()
-        self.qss()
+        # self.qss()
+
+
         # 二维
-        self.pyqtgraph1 = pg.GraphicsLayoutWidget(self.centralwidget)
-        self.pyqtgraph1.setObjectName("pyqtgraph1")
-        self.pyqtgraph1.setBackground('#F8F8FF')
-        self.gridLayout_2.addWidget(self.pyqtgraph1, 0, 0, 1, 1)
-        self.plt2 = self.pyqtgraph1.addPlot(title='绘制多条线')
+        # self.pyqtgraph1 = pg.GraphicsLayoutWidget(self.centralwidget)
+        # self.pyqtgraph1.setObjectName("pyqtgraph1")
+        # self.pyqtgraph1.setBackground('#F8F8FF')
+        # self.gridLayout_2.addWidget(self.pyqtgraph1, 4, 0, 1, 1)
+        # self.plt2 = self.pyqtgraph1.addPlot(title='绘制多条线')
 
         # 三维图
         # self.graph = gl.GLViewWidget(self.centralwidget)
@@ -173,6 +175,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
     def qss(self):
         self.pushButton_5.setStyleSheet('''QPushButton{background:rgb(100,149,237);border-radius:15px;}\
+        QPushButton:hover{background:rgb(65,105,225);border-radius:15px;}''')
+        self.pushButton_8.setStyleSheet('''QPushButton{background:rgb(100,149,237);border-radius:15px;}\
         QPushButton:hover{background:rgb(65,105,225);border-radius:15px;}''')
     # QApplication.processEvents()实现页面刷新
 
