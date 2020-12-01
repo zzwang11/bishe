@@ -162,7 +162,7 @@ class Ui_MainWindow(object):
         self.pushButton_7.setObjectName("pushButton_7")
         self.gridLayout_2.addWidget(self.pushButton_7, 1, 1, 1, 1)
 
-        self.splitter1.setStyleSheet('QSplitter{border: 1px}')
+        self.splitter1.setStyleSheet('QSplitter{border: 10px green}')
 
 
         MainWindow.setCentralWidget(self.centralwidget)

@@ -36,7 +36,7 @@ class Splitter(QWidget):
         splitter2 = QSplitter(Qt.Vertical)
         splitter2.addWidget(splitter1)
         splitter2.addWidget(bottom)
-
+        # splitter2.setStyleSheet('QSplitter{border: 1px}')
 
         hbox.addWidget(splitter2)
         self.setLayout(hbox)
