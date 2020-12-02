@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QStatusBar, QSplitter
-from mywidget.MainWindowT import Ui_MainWindow
+from mywidget.MainWindowB import Ui_MainWindow
 from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread,QWaitCondition,Qt
 from PyQt5 import QtGui,QtCore
 from mywidget import connectPic, helpPage
@@ -39,14 +39,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
 
         # 二维
-        self.pyqtgraph1 = pg.GraphicsLayoutWidget(self.widget)
-        self.pyqtgraph1.setObjectName("pyqtgraph1")
-        self.pyqtgraph1.setBackground('#F8F8FF')
-        self.graphicsView.close()
-        self.verticalLayout.addWidget(self.pyqtgraph1)
+
+
         ccc = [1,2,3,4,5,6]
         ddd = [0.1,0.2,0.3,0.4,0.5,0.6]
-        self.plt2 = self.pyqtgraph1.addPlot(title='绘制多条线')
+        self.plt2 = self.pyqtgraph1.addPlot(title='绘制多条线',pen=pg.mkPen(color='b', width=4))
         self.plt2.plot(ccc,ddd)
 
 
@@ -117,16 +114,16 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         # self.thread_exa = suit_cla()
         # self.thread_exa.start()
         # self.thread_exa.mySig.connect(self.bar)
+        a = [1,2,3,4,5]
+        self.set_2d(a)
 
-
-
-        self.statusBar.showMessage('测量中......',10**8)
-        self.pushButton.setEnabled(False)
-        self.thread1 = myThread()
-        self.thread1.start()
-        # self.graph.close()
-        # self.thread1.mySig.connect(lambda i:self.progressBar.setValue(i))
-        self.thread1.mySig.connect(self.settext)
+        # self.statusBar.showMessage('测量中......',10**8)
+        # self.pushButton.setEnabled(False)
+        # self.thread1 = myThread()
+        # self.thread1.start()
+        # # self.graph.close()
+        # # self.thread1.mySig.connect(lambda i:self.progressBar.setValue(i))
+        # self.thread1.mySig.connect(self.settext)
 
     def settext(self,a):
         self.progressBar.setValue(a*10)

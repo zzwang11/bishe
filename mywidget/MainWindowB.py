@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import pyqtgraph as pg
 
 
 class Ui_MainWindow(object):
@@ -110,9 +111,9 @@ class Ui_MainWindow(object):
         self.Label.setObjectName("Label")
         self.gridLayout.addWidget(self.Label, 0, 0, 1, 1)
         self.gridLayout_2.addWidget(self.formGroupBox, 4, 3, 1, 1)
-        # self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
-        # self.graphicsView.setObjectName("graphicsView")
-        # self.gridLayout_2.addWidget(self.graphicsView, 4, 0, 1, 1)
+        self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
+        self.graphicsView.setObjectName("graphicsView")
+        self.gridLayout_2.addWidget(self.graphicsView, 4, 0, 1, 1)
         self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
         self.progressBar.setProperty("value", 24)
         self.progressBar.setObjectName("progressBar")

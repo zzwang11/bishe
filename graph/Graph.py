@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication
 import pyqtgraph as pg
 from graph.pyqtgraph_pyqt import Ui_MainWindow
 import numpy as np
-
+import pyqtgraph.opengl as gl
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -44,6 +44,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                   name="Red curve")
         plt2.plot(np.random.normal(size=110) + 5, pen=(0, 255, 0), name="Green curve")
         plt2.plot(np.random.normal(size=120) + 10, pen=(0, 0, 255), name="Blue curve")
+        plt2.showGrid(x=True,y=True)
 
 
     def draw2(self):
@@ -51,7 +52,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         plt = self.pyqtgraph2.addPlot(title='绘制条状图')
         x = np.arange(10)
-        print(x)
         y1 = np.sin(x)
         y2 = 1.1 * np.sin(x + 1)
         y3 = 1.2 * np.sin(x + 2)
@@ -63,6 +63,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         plt.addItem(bg1)
         plt.addItem(bg2)
         plt.addItem(bg3)
+        plt.showGrid(x = True, y=True)
 
         self.pyqtgraph2.nextRow()
 
@@ -70,7 +71,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         x = np.cos(np.linspace(0, 2 * np.pi, 1000))
         y = np.sin(np.linspace(0, 4 * np.pi, 1000))
         p4.plot(x, y, pen=pg.mkPen(color='d', width=2))
-        #p4.showGrid(x=True, y=True)  # 显示网格
+        p4.showGrid(x=True, y=True)  # 显示网格
 
 
 
