@@ -2,6 +2,7 @@ import numpy as np
 import pyvisa
 import time
 import os
+import math
 
 
 def pna_setup(pna, points: int, centerf: float, span: float, ifband: float, power: float, edelay: float, averages: int):
@@ -48,20 +49,23 @@ def read_data(pna, points, outputfile, power, temp):
     freq = np.linspace(float(pna.query('SENSe1:FREQuency:START?')), float(pna.query('SENSe1:FREQuency:STOP?')), points)
 
     # read in phase
-    pna.write('CALCulate1:FORMat PHASe')
-    phase = pna.query_ascii_values('CALCulate1:DATA? FDATA', container=np.array)
+    # pna.write('CALCulate1:FORMat PHASe')
+    pna.write('CALCulate1:FORMat REAL')
+    re = pna.query_ascii_values('CALCulate1:DATA? FDATA', container=np.array)
 
     # read in mag
-    pna.write('CALCulate1:FORMat MLOG')
-    mag = pna.query_ascii_values('CALCulate1:DATA? FDATA', container=np.array)
+    # pna.write('CALCulate1:FORMat MLOG')
+    pna.write('CALCulate1:FORMat IMAGinary')
+    im = pna.query_ascii_values('CALCulate1:DATA? FDATA', container=np.array)
 
     # open output file and put data points into the file
     file1 = path1 + outputfile[0:-4] + '_' + str(power) + 'dB' + '_' + str(
         temp) + 'mK' + time.strftime('%H-%M-%S', time.localtime()) + '.csv'
-    file = open(file1, "w")
+    file = open(file1, "a")
     count = 0
+
     for i in freq:
-        file.write(str(i) + ',' + str(mag[count]) + ',' + str(phase[count]) + '\n')
+        file.write(str(re[count]) + ' ' + str(im[count]) + '\n')
         count = count + 1
     file.close()
 

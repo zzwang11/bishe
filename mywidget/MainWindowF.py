@@ -14,7 +14,7 @@ import pyqtgraph as pg
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(823, 510)
+        MainWindow.resize(1200, 760)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
@@ -41,7 +41,6 @@ class Ui_MainWindow(object):
         self.pushButton_8.setObjectName("pushButton_8")
         self.horizontalLayout_2.addWidget(self.pushButton_8)
         self.pushButton_5 = QtWidgets.QPushButton(self.widget)
-
         self.pushButton_5.setObjectName("pushButton_5")
         self.horizontalLayout_2.addWidget(self.pushButton_5)
 
@@ -77,15 +76,19 @@ class Ui_MainWindow(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.pushButton = QtWidgets.QPushButton(self.widget1)
+        self.pushButton.setMaximumSize(200,50)
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout.addWidget(self.pushButton)
         self.pushButton_2 = QtWidgets.QPushButton(self.widget1)
+        self.pushButton_2.setMaximumSize(200,50)
         self.pushButton_2.setObjectName("pushButton_2")
         self.horizontalLayout.addWidget(self.pushButton_2)
         self.pushButton_4 = QtWidgets.QPushButton(self.widget1)
+        self.pushButton_4.setMaximumSize(200,50)
         self.pushButton_4.setObjectName("pushButton_4")
         self.horizontalLayout.addWidget(self.pushButton_4)
         self.pushButton_3 = QtWidgets.QPushButton(self.widget1)
+        self.pushButton_3.setMaximumSize(200,50)
         self.pushButton_3.setObjectName("pushButton_3")
         self.horizontalLayout.addWidget(self.pushButton_3)
         self.verticalLayout.addLayout(self.horizontalLayout)
@@ -99,7 +102,8 @@ class Ui_MainWindow(object):
 
 
         self.widget2 = QtWidgets.QWidget(self.splitter1)
-        self.widget2.setMaximumSize(QtCore.QSize(800,10000))
+        self.widget2.setMaximumSize(QtCore.QSize(600,10000))
+
         self.widget2.setObjectName("widget2")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.widget2)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)

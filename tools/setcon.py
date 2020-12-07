@@ -7,7 +7,8 @@ from PyQt5 import QtGui
 def pic_2d(self,a):
     # 二维图
     self.pyqtgraph1.clear()
-    self.pyqtgraph1.addPlot(title="绘图单条线", y=a, pen=pg.mkPen(color='b', width=2))
+    c = self.pyqtgraph1.addPlot(title="绘图单条线", pen=pg.mkPen(color='b', width=2))
+    c.plot(x=a[0],y=a[1])
 
 
 def pic_3d(self,a):
@@ -18,6 +19,26 @@ def pic_3d(self,a):
     # zz = pg.gaussianFilter(np.zeros([20, 20]), (1, 1))
     #
     print(a)
+    # 三维图
+    # self.graph = gl.GLViewWidget(self.centralwidget)
+    # self.graph.setObjectName("graph")
+    # self.graph.setBackgroundColor(QtGui.QColor('white'))
+    # self.graph.opts['distance'] = 40
+    # self.gx = gl.GLGridItem()
+    # self.gx.rotate(90, 0, 1, 0)
+    # self.gx.translate(-10, 0, 0)
+    # self.gx.setColor(QtGui.QColor('black'))
+    # self.graph.addItem(self.gx)
+    # self.gy = gl.GLGridItem()
+    # self.gy.rotate(90, 1, 0, 0)
+    # self.gy.translate(0, -10, 0)
+    # self.gy.setColor(QtGui.QColor('black'))
+    # self.graph.addItem(self.gy)
+    # self.gz = gl.GLGridItem()
+    # self.gz.translate(0, 0, -10)
+    # self.gz.setColor(QtGui.QColor('black'))
+    # self.graph.addItem(self.gz)
+    # self.gridLayout_2.addWidget(self.graph, 0, 0, 1, 1)
 
     # 画线
     # for i in range(n):

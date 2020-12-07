@@ -32,41 +32,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.statusBar.showMessage('123456',10000)
         self.preSet()
         # self.qss()
-        # self.comboBox.addItem('1111')
-        # self.comboBox.addItem('2222')
+        self.comboBox.addItem('直连测量')
+        self.comboBox.addItem('天线测量')
         # self.comboBox.currentTextChanged.connect(self.select_change)
         self.path = './save'
-
-
-        # 二维
-
-
-        ccc = [1,2,3,4,5,6]
-        ddd = [0.1,0.2,0.3,0.4,0.5,0.6]
-        # self.plt2 = self.pyqtgraph1.addPlot(title='绘制多条线',pen=pg.mkPen(color='b', width=4))
-        # self.plt2.plot(ccc,ddd)
-
-
-        # 三维图
-        # self.graph = gl.GLViewWidget(self.centralwidget)
-        # self.graph.setObjectName("graph")
-        # self.graph.setBackgroundColor(QtGui.QColor('white'))
-        # self.graph.opts['distance'] = 40
-        # self.gx = gl.GLGridItem()
-        # self.gx.rotate(90, 0, 1, 0)
-        # self.gx.translate(-10, 0, 0)
-        # self.gx.setColor(QtGui.QColor('black'))
-        # self.graph.addItem(self.gx)
-        # self.gy = gl.GLGridItem()
-        # self.gy.rotate(90, 1, 0, 0)
-        # self.gy.translate(0, -10, 0)
-        # self.gy.setColor(QtGui.QColor('black'))
-        # self.graph.addItem(self.gy)
-        # self.gz = gl.GLGridItem()
-        # self.gz.translate(0, 0, -10)
-        # self.gz.setColor(QtGui.QColor('black'))
-        # self.graph.addItem(self.gz)
-        # self.gridLayout_2.addWidget(self.graph, 0, 0, 1, 1)
 
 
 

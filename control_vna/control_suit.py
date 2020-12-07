@@ -27,7 +27,7 @@ class suit_cla(QThread):
         outputfile = conf.get('test_config', 'outputfile')
         inst = f'TCPIP::{ip}::inst0::INSTR'
         file_list = []
-        errormsg = 0
+
         if span > 200:
             ad = centerf-span/2
             j = 0

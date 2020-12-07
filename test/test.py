@@ -143,14 +143,22 @@ import sys
 ss = 1
 print(sys.getsizeof(ss))
 with open("../save/1.txt",'r') as f:
-    a = f.readline()
-    while a:
+    for line in f:
+        print(line)
+    # a = f.readline()
+    # while a:
+    #
+    #     print(a)
+    #     print(sys.getsizeof(a))
+    #     a = f.readline()
+# b = a.split()
+# c = f.readlines(7)
+# print(c)
+# print(b)
+# print(type(a))
 
-        print(a)
-        print(sys.getsizeof(a))
-        a = f.readline()
-    # # b = a.split()
-    # c = f.readlines(7)
-    # print(c)
-    # # print(b)
-    # # print(type(a))
+# import socket
+#
+# print("您当前的主机名为" + socket.gethostname())
+#
+# print("您当前的IP地址为" + socket.gethostbyname(socket.gethostname()))
