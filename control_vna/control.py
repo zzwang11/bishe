@@ -97,7 +97,7 @@ def getdata(inst: str, centerf: float, span: float, temp: float, averages: int, 
     # count = 10000000
     # while count > 0:
     #     count = count - 1
-    time.sleep(1)
+    time.sleep(10)
     while True:
         if inst.query('STAT:OPER:AVER1:COND?')[1] != "0":
             break

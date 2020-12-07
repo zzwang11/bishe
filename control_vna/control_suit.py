@@ -40,7 +40,7 @@ class suit_cla(QThread):
                 try:
                     file_list.append(getdata(inst, ad+100, 200, temp, averages, power, edelay, ifband, points, outputfile))
                 except:
-                    errormsg = 1
+                    print("test fail")
                 ad += 200
                 j = j+200
                 i = math.floor((j/span)*100)
@@ -50,7 +50,7 @@ class suit_cla(QThread):
             try:
                 file_list.append(getdata(inst, centerf, span, temp, averages, power, edelay, ifband, points, outputfile))
             except:
-                errormsg = 1
+                print("test fail")
 
 
     def pause(self):
