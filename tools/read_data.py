@@ -13,4 +13,5 @@ class MyRD(QThread):
         with open(self.filepath, 'r') as f:
             a = f.read()
         b = a.split()
-        self.myOut.emit(b)
+        c = [int(i) for i in b]
+        self.myOut.emit(c)

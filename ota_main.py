@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QStatusBar, QSplitter
-from mywidget.MainWindowB import Ui_MainWindow
+from mywidget.MainWindowF import Ui_MainWindow
 from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread,QWaitCondition,Qt
 from PyQt5 import QtGui,QtCore
 from mywidget import connectPic, helpPage
@@ -35,7 +35,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         # self.comboBox.addItem('1111')
         # self.comboBox.addItem('2222')
         # self.comboBox.currentTextChanged.connect(self.select_change)
-        # self.path = './save'
+        self.path = './save'
 
 
         # 二维
@@ -43,8 +43,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
         ccc = [1,2,3,4,5,6]
         ddd = [0.1,0.2,0.3,0.4,0.5,0.6]
-        self.plt2 = self.pyqtgraph1.addPlot(title='绘制多条线',pen=pg.mkPen(color='b', width=4))
-        self.plt2.plot(ccc,ddd)
+        # self.plt2 = self.pyqtgraph1.addPlot(title='绘制多条线',pen=pg.mkPen(color='b', width=4))
+        # self.plt2.plot(ccc,ddd)
 
 
         # 三维图
@@ -94,7 +94,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.readconf()
 
     def select_change(self,i):
-        self.read = read_data.MyRD(self.path,'1')
+        self.read = read_data.MyRD(self.path,'2')
         self.read.start()
         self.read.myOut.connect(self.set_2d)
 
@@ -114,8 +114,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         # self.thread_exa = suit_cla()
         # self.thread_exa.start()
         # self.thread_exa.mySig.connect(self.bar)
-        a = [1,2,3,4,5]
-        self.set_2d(a)
+        # a = [1,2,3,4,5]
+        # self.set_2d(a)
+        self.select_change(1)
 
         # self.statusBar.showMessage('测量中......',10**8)
         # self.pushButton.setEnabled(False)
@@ -132,9 +133,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         # self.plt2.plot(y = n,pen=(a*10,255,0))
 
     def pause(self):
-        self.thread1.pause()
-        self.statusBar.showMessage('暂停测量',10**8)
+        # self.thread1.pause()
+        # self.statusBar.showMessage('暂停测量',10**8)
         # self.graph.show()
+        self.pyqtgraph1.clear()
+        self.pyqtgraph1.addPlot(title="huaaa")
 
     def go_on(self):
         self.thread1.goon()

@@ -6,7 +6,7 @@ from PyQt5 import QtGui
 
 def pic_2d(self,a):
     # 二维图
-
+    self.pyqtgraph1.clear()
     self.pyqtgraph1.addPlot(title="绘图单条线", y=a, pen=pg.mkPen(color='b', width=2))
 
 

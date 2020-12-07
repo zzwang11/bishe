@@ -21,7 +21,7 @@ class Ui_MainWindow(object):
         self.splitter1 = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
         self.gridLayout3 = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout3.setObjectName("gridLayout3")
-        self.gridLayout3.addWidget(self.splitter1)
+        self.gridLayout3.addWidget(self.splitter1,1,1,1,1)
         self.layoutWidget = QtWidgets.QWidget(self.splitter1)
         # self.layoutWidget.setGeometry(QtCore.QRect(10, 11, 661, 671))
         self.layoutWidget.setObjectName("layoutWidget")
@@ -61,6 +61,7 @@ class Ui_MainWindow(object):
         self.pushButton_3.setObjectName("pushButton_3")
         self.horizontalLayout.addWidget(self.pushButton_3)
         self.verticalLayout.addLayout(self.horizontalLayout)
+
         self.layoutWidget1 = QtWidgets.QWidget(self.splitter1)
         # self.layoutWidget1.setGeometry(QtCore.QRect(800, 40, 471, 621))
         self.layoutWidget1.setObjectName("layoutWidget1")
