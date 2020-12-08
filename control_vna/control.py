@@ -19,8 +19,8 @@ def pna_setup(pna, points: int, centerf: float, span: float, ifband: float, powe
         pna.write('DISPlay:WINDow1:TRACe2:FEED \'Meas\'')
     # set parameters for sweep
     pna.write('SENSe1:SWEep:POINts {}'.format(points))
-    pna.write('SENSe1:FREQuency:CENTer {}GHZ'.format(centerf))
-    pna.write('SENSe1:FREQuency:SPAN {}MHZ'.format(span))
+    pna.write('SENSe1:FREQuency:START {}MHZ'.format(centerf))
+    pna.write('SENSe1:FREQuency:STOP {}MHZ'.format(span))
     pna.write('SENSe1:BANDwidth {}KHZ'.format(ifband))
     pna.write('SENSe1:SWEep:TIME:AUTO ON')
     pna.write('SOUR:POW1 {}'.format(power))

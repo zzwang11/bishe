@@ -7,9 +7,10 @@ from PyQt5 import QtGui
 def pic_2d(self,a):
     # 二维图
     self.pyqtgraph1.clear()
-    c = self.pyqtgraph1.addPlot(title="绘图单条线", pen=pg.mkPen(color='b', width=2))
-    c.plot(x=a[0],y=a[1])
+    self.c = self.pyqtgraph1.addPlot(title=a, pen=pg.mkPen(color='b', width=2))
 
+def draw_2d(self,a):
+    self.c.plot(x=a[0], y=a[1])
 
 def pic_3d(self,a):
 
