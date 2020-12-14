@@ -138,19 +138,23 @@
 #     b = str(d)[10:14]
 #     print(time.strftime("%H:%M:%S",time.localtime()),end='')
 #     print(str(b))
-import sys
+# import sys
+#
+# ss = 1
+# print(sys.getsizeof(ss))
+# with open("../save/1.txt",'r') as f:
+#     for line in f:
+#         print(line)
+#     a = f.readline()
+#     while a:
+#
+#         print(a)
+#         print(sys.getsizeof(a))
+#         a = f.readline()
+#     c = f.read()
+#     d = c.split()
+#     print(d)
 
-ss = 1
-print(sys.getsizeof(ss))
-with open("../save/1.txt",'r') as f:
-    for line in f:
-        print(line)
-    # a = f.readline()
-    # while a:
-    #
-    #     print(a)
-    #     print(sys.getsizeof(a))
-    #     a = f.readline()
 # b = a.split()
 # c = f.readlines(7)
 # print(c)
@@ -162,3 +166,157 @@ with open("../save/1.txt",'r') as f:
 # print("您当前的主机名为" + socket.gethostname())
 #
 # print("您当前的IP地址为" + socket.gethostbyname(socket.gethostname()))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# class Node:
+#     def __init__(self,node,next_= None):
+#         self.node = node
+#         self.next = next_
+#
+#
+#
+#
+# def reverse(head):
+#     if head == None or head.next==None:
+#         return head
+#     pre = None
+#     next = None
+#     while(head != None):
+#         next = head.next
+#         head.next = pre
+#         pre = head
+#         head = next
+#     return pre
+#
+#
+# if __name__ == '__main__':
+#     a = Node(3)
+#     a.next = Node(4)
+#     a.next.next = Node(5)
+#     l = reverse(a)
+#     print(l.node,l.next.node,l.next.next.node)
+
+
+# class Signal:
+#     def __init__(self, a):
+#         self.a = a
+#
+#     @classmethod
+#     def fun(cls, a):
+#         if not hasattr(Signal, "_fun"):
+#             Signal._fun = Signal(a)
+#         return Signal._fun
+#
+#
+# a = Signal.fun(11)
+# b = Signal.fun(12)
+# print(a)
+# print(b)
+
+
+# select * from table where score>=any;
+# select * from table order by score decs limit 1;
+
+
+
+# l = [1,2,3,4,5,6,7]
+# i = -1
+# l.sort()
+# def find(x,list,m):
+#     mid = len(list)//2
+#     if x>list[mid]:
+#         find(x,list[mid:],mid)
+#     elif x<list[mid]:
+#         find(x,list[:mid])
+#     elif x==list[mid]:
+#         return mid
+#
+# while
+
+
+# class Node:
+#     def __init__(self,value):
+#         self.val = value
+#         self.next = None
+#
+#
+# def huan(list1):
+#     p1 = p2 = list1
+#     while p2 and p2.next:
+#         p1 = p1.next
+#         p2 = p2.next.next
+#         if p1 == p2:
+#             return True
+#     return False
+#
+# L = Node(1)
+# l1 = Node(2)
+# l2 = Node(3)
+# l3 = Node(4)
+# l4 = Node(5)
+# l5 = Node(6)
+# L.next = l1
+# l1.next = l2
+# l2.next = l3
+# l3.next = l4
+# l4.next = l5
+# l5.next = l2
+#
+# print(huan(L))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

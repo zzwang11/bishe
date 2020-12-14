@@ -24,7 +24,7 @@ class myThread(QThread):
 
     def run(self):
         i = 1
-        a = (j for j in range(1,10))
+
         while self.working:
             i += 1
             time.sleep(1)
@@ -35,10 +35,9 @@ class myThread(QThread):
                 qmute.lock()
                 condi.wait(qmute)
                 qmute.unlock()
-            if next(a):
-                self.mySig.emit(next(a))
-            else:
-                a = (j for j in range(10))
+
+            self.mySig.emit(i%10)
+
 
 
 

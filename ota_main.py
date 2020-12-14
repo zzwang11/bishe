@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QStatusBar, QSplitter
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QStatusBar, QSplitter, QDesktopWidget
 from mywidget.MainWindowF import Ui_MainWindow
 from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread,QWaitCondition,Qt
 from PyQt5 import QtGui,QtCore
@@ -23,21 +23,16 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MyMainWindow, self).__init__(parent)
         self.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
-
         self.setupUi(self)
-        # self.setconf()
         # 状态栏
-        self.statusBar = QStatusBar()
-        self.setStatusBar(self.statusBar)
-        self.statusBar.showMessage('123456',10000)
+
         self.preSet()
-        # self.qss()
-        self.comboBox.addItem('直连测量')
-        self.comboBox.addItem('天线测量')
-        # self.comboBox.currentTextChanged.connect(self.select_change)
-        self.path = './save'
+        self.qss()
 
 
+        # 绑定模式
+        self.radioButton.toggled.connect(self.buttonState)
+        self.radioButton_2.toggled.connect(self.buttonState)
 
         # 实现测量开始、暂停、继续、停止
         self.pushButton.clicked.connect(self.measure)
@@ -52,6 +47,12 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.action5.triggered.connect(QCoreApplication.instance().quit)
         self.actionhelp.triggered.connect(self.helppage)
 
+    def buttonState(self):
+        radioButton = self.sender()
+        if radioButton.isChecked():
+            self.state=radioButton.text()
+            information_dialog(self, '提示', '请先进行连线测量，再进行天线测量')
+
     def set_3d(self,a):
         tools.setcon.pic_3d(self,a)
 
@@ -60,18 +61,26 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
     def preSet(self):
         # self.LineEdit.setInputMask('999.999.999.999;_')
+        self.statusBar = QStatusBar()
+        self.setStatusBar(self.statusBar)
+        self.progressBar.setValue(0)
         self.readconf()
+        self.radioButton.setChecked(True)
+        self.path = './save'
+        self.state = "线缆连接测量"
+        self.save_path = 'd://'
+
+
 
     def select_change(self,i):
         self.read = read_data.MyRD(self.path,'2')
         self.read.start()
         self.read.myOut.connect(self.set_2d)
 
-
     def con_pic(self):
-        self.a = connectPic.picture()
-        self.a.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
-        self.a.show()
+        self.pic = connectPic.picture()
+        self.pic.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
+        self.pic.show()
 
     def helppage(self):
         self.help_page = helpPage.mainwindow()
@@ -82,31 +91,36 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
     def measure(self):
         # self.thread_exa = suit_cla()
         # self.thread_exa.start()
-        # self.thread_exa.mySig.connect(self.bar)
-        # a = [1,2,3,4,5]
-        # self.set_2d(a)
-        self.select_change(1)
+        # self.thread_exa.mySig.connect(self.mat)
 
-        # self.statusBar.showMessage('测量中......',10**8)
-        # self.pushButton.setEnabled(False)
-        # self.thread1 = myThread()
-        # self.thread1.start()
-        # # self.graph.close()
-        # # self.thread1.mySig.connect(lambda i:self.progressBar.setValue(i))
-        # self.thread1.mySig.connect(self.settext)
+        # self.select_change(1)
 
-    def settext(self,a):
+        self.statusBar.showMessage('测量中......',10**8)
+        self.pushButton.setEnabled(False)
+        self.thread1 = myThread()
+        self.thread1.start()
+        # self.thread1.mySig.connect(lambda i:self.progressBar.setValue(i))
+        self.thread1.mySig.connect(self.setbar)
+
+    def mat(self):
+        with open('1.txt','r') as f:
+            a = f.read().split()
+        with open('2.txt','r') as f:
+            b = f.read().split()
+        c = []
+        for i in range(min(len(a),len(b))):
+            c.append(eval(a[i])-eval(b[i]))
+        self.c.addplot(x = np.array(),y = c)
+
+    def setbar(self,a):
         self.progressBar.setValue(a*10)
-        # x = np.linspace(0,20,200)
-        # n = np.sin(a*x)
-        # self.plt2.plot(y = n,pen=(a*10,255,0))
+
 
     def pause(self):
-        # self.thread1.pause()
-        # self.statusBar.showMessage('暂停测量',10**8)
-        # self.graph.show()
-        self.pyqtgraph1.clear()
-        self.pyqtgraph1.addPlot(title="huaaa")
+        self.thread1.pause()
+        self.statusBar.showMessage('暂停测量',10**8)
+        self.graph.show()
+
 
     def go_on(self):
         self.thread1.goon()
@@ -131,6 +145,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         outputfile = self.LineEdit_10.text()
         self.wr = write_conf.writeThread(IP, centerf, span, temp, averages, power, edelay, ifband, points, outputfile)
         self.wr.start()
+        self.save_path = ''
         self.statusBar.showMessage('保存配置成功！',10**5)
 
     def readconf(self):
@@ -158,10 +173,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         information_dialog(self, 'cheng gong', 'you success')
 
     def qss(self):
-        self.pushButton_5.setStyleSheet('''QPushButton{background:rgb(100,149,237);border-radius:15px;}\
-        QPushButton:hover{background:rgb(65,105,225);border-radius:15px;}''')
-        self.pushButton_8.setStyleSheet('''QPushButton{background:rgb(100,149,237);border-radius:15px;}\
-        QPushButton:hover{background:rgb(65,105,225);border-radius:15px;}''')
+        self.pushButton_5.setStyleSheet('''QPushButton{background:rgb(100,149,237);border-radius:10px;}\
+        QPushButton:hover{background:rgb(65,105,225);border-radius:10px;}''')
+        self.pushButton_8.setStyleSheet('''QPushButton{background:rgb(100,149,237);border-radius:10px;}\
+        QPushButton:hover{background:rgb(65,105,225);border-radius:10px;}''')
     # QApplication.processEvents()实现页面刷新
 
 

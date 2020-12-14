@@ -14,7 +14,9 @@ import pyqtgraph as pg
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1200, 760)
+        self.width = QtWidgets.QApplication.desktop().screenGeometry().width()
+        self.height = QtWidgets.QApplication.desktop().screenGeometry().height()
+        MainWindow.resize(self.width/1.5, self.height/1.5)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
@@ -30,7 +32,7 @@ class Ui_MainWindow(object):
         self.gridLayout3.addWidget(self.line_3,3,0,1,3)
         self.widget = QtWidgets.QWidget(self.centralwidget)
 
-        self.widget.setMaximumSize(300,45)
+        self.widget.setMaximumSize(300,30)
         self.widget.setObjectName("widget")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -38,10 +40,14 @@ class Ui_MainWindow(object):
         self.gridLayout3.addWidget(self.widget,4,2,1,1)
 
         self.pushButton_8 = QtWidgets.QPushButton(self.widget)
+        self.pushButton_8.setMinimumHeight(25)
+
+
         self.pushButton_8.setObjectName("pushButton_8")
         self.horizontalLayout_2.addWidget(self.pushButton_8)
         self.pushButton_5 = QtWidgets.QPushButton(self.widget)
         self.pushButton_5.setObjectName("pushButton_5")
+        self.pushButton_5.setMinimumHeight(25)
         self.horizontalLayout_2.addWidget(self.pushButton_5)
 
 
@@ -53,12 +59,21 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.label_8 = QtWidgets.QLabel(self.widget1)
-        self.label_8.setObjectName("label_8")
-        self.verticalLayout.addWidget(self.label_8)
-        self.comboBox = QtWidgets.QComboBox(self.widget1)
-        self.comboBox.setObjectName("comboBox")
-        self.verticalLayout.addWidget(self.comboBox)
+        self.horizontalLayoutWidget = QtWidgets.QWidget(self.widget1)
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(80, 20, 361, 61))
+        self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
+        self.horizontalLayout1 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
+        self.horizontalLayout1.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout1.setObjectName("horizontalLayout")
+        self.radioButton = QtWidgets.QRadioButton(self.horizontalLayoutWidget)
+        self.radioButton.setObjectName("radioButton")
+        self.radioButton.setText("线缆连接测量")
+        self.horizontalLayout1.addWidget(self.radioButton)
+        self.radioButton_2 = QtWidgets.QRadioButton(self.horizontalLayoutWidget)
+        self.radioButton_2.setObjectName("radioButton_2")
+        self.radioButton_2.setText("天线连接测量")
+        self.horizontalLayout1.addWidget(self.radioButton_2)
+        self.verticalLayout.addWidget(self.horizontalLayoutWidget)
 
         self.pyqtgraph1 = pg.GraphicsLayoutWidget(self.widget1)
         self.pyqtgraph1.setObjectName("pyqtgraph1")
@@ -76,19 +91,19 @@ class Ui_MainWindow(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.pushButton = QtWidgets.QPushButton(self.widget1)
-        self.pushButton.setMaximumSize(200,50)
+        self.pushButton.setMaximumSize(200,30)
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout.addWidget(self.pushButton)
         self.pushButton_2 = QtWidgets.QPushButton(self.widget1)
-        self.pushButton_2.setMaximumSize(200,50)
+        self.pushButton_2.setMaximumSize(200,30)
         self.pushButton_2.setObjectName("pushButton_2")
         self.horizontalLayout.addWidget(self.pushButton_2)
         self.pushButton_4 = QtWidgets.QPushButton(self.widget1)
-        self.pushButton_4.setMaximumSize(200,50)
+        self.pushButton_4.setMaximumSize(200,30)
         self.pushButton_4.setObjectName("pushButton_4")
         self.horizontalLayout.addWidget(self.pushButton_4)
         self.pushButton_3 = QtWidgets.QPushButton(self.widget1)
-        self.pushButton_3.setMaximumSize(200,50)
+        self.pushButton_3.setMaximumSize(200,30)
         self.pushButton_3.setObjectName("pushButton_3")
         self.horizontalLayout.addWidget(self.pushButton_3)
         self.verticalLayout.addLayout(self.horizontalLayout)
@@ -102,7 +117,9 @@ class Ui_MainWindow(object):
 
 
         self.widget2 = QtWidgets.QWidget(self.splitter1)
+
         self.widget2.setMaximumSize(QtCore.QSize(600,10000))
+        self.widget2.setMinimumSize(QtCore.QSize(300, 300))
 
         self.widget2.setObjectName("widget2")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.widget2)
@@ -199,9 +216,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.pushButton_6 = QtWidgets.QPushButton(self.widget2)
         self.pushButton_6.setObjectName("pushButton_6")
+        self.pushButton_6.setMaximumWidth(180)
         self.horizontalLayout_3.addWidget(self.pushButton_6)
         self.pushButton_7 = QtWidgets.QPushButton(self.widget2)
         self.pushButton_7.setObjectName("pushButton_7")
+        self.pushButton_7.setMaximumWidth(180)
         self.horizontalLayout_3.addWidget(self.pushButton_7)
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
 
@@ -295,7 +314,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton_8.setText(_translate("MainWindow", "读取结果"))
         self.pushButton_5.setText(_translate("MainWindow", "保存结果"))
-        self.label_8.setText(_translate("MainWindow", "TextLabel"))
+        # self.label_8.setText(_translate("MainWindow", "TextLabel"))
         self.pushButton.setText(_translate("MainWindow", "开始"))
         self.pushButton_2.setText(_translate("MainWindow", "暂停"))
         self.pushButton_4.setText(_translate("MainWindow", "继续"))
