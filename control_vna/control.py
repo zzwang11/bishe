@@ -5,7 +5,7 @@ import os
 import math
 
 
-def pna_setup(pna, points: int, centerf: float, span: float, ifband: float, power: float, edelay: float, averages: int):
+def pna_setup(pna, points: int, start: float, stop: float, ifband: float, power: float, edelay: float, averages: int):
     """
     set parameters for the PNA for the sweep (number of points, center frequency, span of frequencies,
     IF bandwidth, power, electrical delay and number of averages)
@@ -19,8 +19,8 @@ def pna_setup(pna, points: int, centerf: float, span: float, ifband: float, powe
         pna.write('DISPlay:WINDow1:TRACe2:FEED \'Meas\'')
     # set parameters for sweep
     pna.write('SENSe1:SWEep:POINts {}'.format(points))
-    pna.write('SENSe1:FREQuency:START {}MHZ'.format(centerf))
-    pna.write('SENSe1:FREQuency:STOP {}MHZ'.format(span))
+    pna.write('SENSe1:FREQuency:START {}MHZ'.format(start))
+    pna.write('SENSe1:FREQuency:STOP {}MHZ'.format(stop))
     pna.write('SENSe1:BANDwidth {}KHZ'.format(ifband))
     pna.write('SENSe1:SWEep:TIME:AUTO ON')
     pna.write('SOUR:POW1 {}'.format(power))
@@ -36,7 +36,7 @@ def pna_setup(pna, points: int, centerf: float, span: float, ifband: float, powe
     pna.write('SENSe1:AVERage:Count {}'.format(averages))
 
 
-def read_data(pna, points, outputfile, power, temp):
+def read_data(pna, points, outputfile, power):
     """
     function to read in data from the pna and output it into a file
     """
@@ -59,8 +59,7 @@ def read_data(pna, points, outputfile, power, temp):
     im = pna.query_ascii_values('CALCulate1:DATA? FDATA', container=np.array)
 
     # open output file and put data points into the file
-    file1 = path1 + outputfile[0:-4] + '_' + str(power) + 'dB' + '_' + str(
-        temp) + 'mK' + time.strftime('%H-%M-%S', time.localtime()) + '.csv'
+    file1 = path1 + outputfile[0:-4] + '_' + str(power) + 'dB' + time.strftime('%H-%M-%S', time.localtime()) + '.csv'
     file = open(file1, "a")
     count = 0
 
@@ -72,14 +71,14 @@ def read_data(pna, points, outputfile, power, temp):
     return file1
 
 
-def getdata(inst: str, centerf: float, span: float, temp: float, averages: int, power: float,
+def getdata(inst: str, start: float, stop: float, averages: int, power: float,
             edelay: float, ifband: float, points: int, outputfile: str = "results.csv"):
     """
     function to get data and put it into a user specified file
     """
     # addr = '192.168.0.1'
-    tcp_addr = 'TCPIP::"192.168.0.1"::inst0::INSTR'
-    gpib_addr = 'GPIB0::12::INSTR'
+    # tcp_addr = 'TCPIP::"192.168.0.1"::inst0::INSTR'
+    # gpib_addr = 'GPIB0::12::INSTR'
 
     # set up the PNA to measure s21 for the specific instrument GPIB0::16::INSTR
     rm = pyvisa.ResourceManager()
@@ -87,7 +86,7 @@ def getdata(inst: str, centerf: float, span: float, temp: float, averages: int, 
         inst = rm.open_resource(inst)
     except Exception:
         return 0
-    pna_setup(inst, points, centerf, span, ifband, power, edelay, averages)
+    pna_setup(inst, points, start, stop, ifband, power, edelay, averages)
 
     # start taking data for S21
     inst.write('CALCulate1:PARameter:SELect \'Meas\'')
@@ -102,7 +101,7 @@ def getdata(inst: str, centerf: float, span: float, temp: float, averages: int, 
         if inst.query('STAT:OPER:AVER1:COND?')[1] != "0":
             break
 
-    file1 = read_data(inst, points, outputfile, power, temp)
+    file1 = read_data(inst, points, outputfile, power)
     inst.write("trace:clear")
     return file1
 

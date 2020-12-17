@@ -8,9 +8,14 @@ def pic_2d(self,a):
     # 二维图
     self.pyqtgraph1.clear()
     self.c = self.pyqtgraph1.addPlot(title=a, pen=pg.mkPen(color='b', width=2))
+    self.c.setLabel('left', "Y Axis", units='A')
+    self.c.setLabel('bottom', "Y Axis", units='s')
+    self.c.setLogMode(x=True, y=False)
 
 def draw_2d(self,a):
     self.c.plot(x=a[0], y=a[1])
+
+
 
 def pic_3d(self,a):
 

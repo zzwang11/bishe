@@ -16,9 +16,8 @@ class suit_cla(QThread):
     def run(self):
         conf = ReadConfig()
         ip = conf.get('test_config','ip')
-        span = conf.get('test_config','span')
-        centerf = conf.get('test_config','centerf')
-        temp = conf.get('test_config','temp')
+        stop = conf.get('test_config','stop')
+        start = conf.get('test_config','start')
         averages = conf.get('test_config','averages')
         power = conf.get('test_config', 'power')
         edelay = conf.get('test_config', 'edelay')
@@ -27,30 +26,38 @@ class suit_cla(QThread):
         outputfile = conf.get('test_config', 'outputfile')
         inst = f'TCPIP::{ip}::inst0::INSTR'
         file_list = []
-
-        if span > 200:
-            ad = centerf-span/2
+        if stop >3000:
+            span = 200
+        else:
+            span = 50
+        if stop - start > span:
             j = 0
-            while ad<centerf+span/2:
+            start0 = start
+            stop0 = start + span
+            while stop0 < stop:
 
                 if self.flag:
                     qmute.lock()
                     condi.wait(qmute)
                     qmute.unlock()
                 try:
-                    file_list.append(getdata(inst, ad+100, 200, temp, averages, power, edelay, ifband, points, outputfile))
+                    file_list.append(getdata(inst, start0, stop0, averages, power, edelay, ifband, points, outputfile))
                 except:
                     print("test fail")
-                ad += 200
-                j = j+200
-                i = math.floor((j/span)*100)
+                start0 += span
+                stop0 += span
+                j = j+span
+                i = math.floor((j/(stop - start))*100)
                 self.mySig.emit(i)
+            file_list.append(getdata(inst, stop0, stop, averages, power, edelay, ifband, points, outputfile))
             self.mySig.emit(100)
+
         else:
             try:
-                file_list.append(getdata(inst, centerf, span, temp, averages, power, edelay, ifband, points, outputfile))
+                file_list.append(getdata(inst, start, stop, averages, power, edelay, ifband, points, outputfile))
             except:
                 print("test fail")
+            self.mySig.emit(100)
 
 
     def pause(self):

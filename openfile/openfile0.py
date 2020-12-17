@@ -80,7 +80,7 @@ class MyWindow(QtWidgets.QWidget):
                 print('write fail')
 
     '''
-    directory1 = QFileDialog.getExistingDirectory(self, "选择文件夹", "/")
+    
     print(directory1)  # 打印文件夹路径
     text.setText(_translate("Form", directory1))
     fileName, filetype = QFileDialog.getOpenFileName(self, "选择文件", "/", "All Files (*);;Text Files (*.txt)")

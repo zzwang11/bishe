@@ -13,13 +13,13 @@ class picture(QWidget):
     def __init__(self):
         super(picture, self).__init__()
 
-        self.resize(620, 500)
+        self.resize(910, 500)
         self.setWindowTitle("选择连接模式")
-        self.setMaximumSize(620, 500)
-        self.setMinimumSize(620, 500)
+        self.setMaximumSize(910, 500)
+        self.setMinimumSize(910, 500)
         self.label = QLabel(self)
         self.label.setText("显示图片")
-        self.label.setFixedSize(600, 400)
+        self.label.setFixedSize(900, 420)
         self.label.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
 
         self.label.setStyleSheet("QLabel{background:white;}"
@@ -31,9 +31,10 @@ class picture(QWidget):
         btn.resize(200,60)
         btn.setText("关闭")
         btn.clicked.connect(self.close)
+        self.openimage('线缆连接测量')
 
         comb = QtWidgets.QComboBox(self)
-        comb.addItems(['直连','天线'])
+        comb.addItems(['线缆连接测量','天线连接测量'])
         comb.activated[str].connect(self.openimage)
 
         vbox1 = QVBoxLayout()
@@ -48,7 +49,7 @@ class picture(QWidget):
 
     def openimage(self,s):
 
-        d = {'直连':'Cloudy_72px.png','天线':'python.jpg'}
+        d = {'线缆连接测量':'zhijie.png', '天线连接测量':'tianxian.png'}
         imgName = './img/'+d[s]
         jpg = QtGui.QPixmap(imgName).scaled(self.label.width(), self.label.height())
         self.label.setPixmap(jpg)

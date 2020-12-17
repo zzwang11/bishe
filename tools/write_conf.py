@@ -3,12 +3,11 @@ from PyQt5.QtCore import QThread
 
 
 class writeThread(QThread):
-    def __init__(self,ip, centerf, span, temp, averages, power, edelay, ifband, points, outputfile):
+    def __init__(self,ip, start, stop, averages, power, edelay, ifband, points, outputfile):
         super().__init__()
         self.ip = ip
-        self.centerf = centerf
-        self.span = span
-        self.temp = temp
+        self.start = start
+        self.span = stop
         self.averages = averages
         self.power = power
         self.edelay = edelay
@@ -19,13 +18,12 @@ class writeThread(QThread):
     def run(self):
         conf = ReadConfig()
         if self.span != '':
-            conf.set('test_config','span',self.span)
+            conf.set('test_config','stop',self.stop)
         if self.ip != '':
             conf.set('test_config','ip',self.ip)
         if self.centerf != '':
-            conf.set('test_config','centerf',self.centerf)
-        if self.temp != '':
-            conf.set('test_config','temp',self.temp)
+            conf.set('test_config','start',self.start)
+
         if self.averages != '':
             conf.set('test_config','averages',self.averages)
         if self.power != '':

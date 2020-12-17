@@ -8,7 +8,7 @@ from tools import write_conf,read_conf,read_data
 from dialog_util.dialogUtil import *
 from control_vna.control_suit import suit_cla
 from thread_exa.wait_thread import myThread
-
+import os
 import time
 import pyqtgraph as pg
 import pyqtgraph.opengl as gl
@@ -52,6 +52,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         if radioButton.isChecked():
             self.state=radioButton.text()
             information_dialog(self, '提示', '请先进行连线测量，再进行天线测量')
+            self.con_pic()
+            self.pyqtgraph1.clear()
+            self.c = self.pyqtgraph1.addPlot(title=self.state, pen=pg.mkPen(color='b', width=5))
+            self.c.setLabel('left', "S21", units='dB')
+            self.c.setLabel('bottom', "频率", units='MHz')
+            self.c.setLogMode(x=False, y=False)
+
 
     def set_3d(self,a):
         tools.setcon.pic_3d(self,a)
@@ -60,22 +67,22 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         tools.setcon.pic_2d(self,a)
 
     def preSet(self):
-        # self.LineEdit.setInputMask('999.999.999.999;_')
         self.statusBar = QStatusBar()
         self.setStatusBar(self.statusBar)
         self.progressBar.setValue(0)
         self.readconf()
-        self.radioButton.setChecked(True)
         self.path = './save'
         self.state = "线缆连接测量"
-        self.save_path = 'd://'
+        self.save_path = 'd://save//'
+        if not os.path.exists(self.save_path):
+            os.mkdir(self.save_path)
 
 
 
-    def select_change(self,i):
-        self.read = read_data.MyRD(self.path,'2')
-        self.read.start()
-        self.read.myOut.connect(self.set_2d)
+    # def select_change(self,i):
+    #     self.read = read_data.MyRD(self.path,'2')
+    #     self.read.start()
+    #     self.read.myOut.connect(self.set_2d)
 
     def con_pic(self):
         self.pic = connectPic.picture()
@@ -94,23 +101,30 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         # self.thread_exa.mySig.connect(self.mat)
 
         # self.select_change(1)
-
+        self.pyqtgraph1.clear()
+        self.c = self.pyqtgraph1.addPlot(title=self.state, pen=pg.mkPen(color='b', width=5))
+        self.c.setLabel('left', "S21", units='dB')
+        self.c.setLabel('bottom', "频率", units='MHz')
+        self.c.setLogMode(x=False, y=False)
         self.statusBar.showMessage('测量中......',10**8)
         self.pushButton.setEnabled(False)
         self.thread1 = myThread()
         self.thread1.start()
         # self.thread1.mySig.connect(lambda i:self.progressBar.setValue(i))
         self.thread1.mySig.connect(self.setbar)
+        self.thread1.mySig1.connect(self.mat)
+
 
     def mat(self):
-        with open('1.txt','r') as f:
+        with open('./save/1.txt','r') as f:
             a = f.read().split()
-        with open('2.txt','r') as f:
-            b = f.read().split()
-        c = []
-        for i in range(min(len(a),len(b))):
-            c.append(eval(a[i])-eval(b[i]))
-        self.c.addplot(x = np.array(),y = c)
+        li = []
+        li0 = []
+        for i in a:
+            li.append(eval(i))
+        for i in li:
+            li0.append(i**2)
+        self.c.plot(x = li,y = li0)
 
     def setbar(self,a):
         self.progressBar.setValue(a*10)
@@ -134,18 +148,16 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
     def writeconf(self):
         IP = self.LineEdit.text()
-        centerf = self.LineEdit_2.text()
-        span = self.LineEdit_3.text()
+        start = self.LineEdit_2.text()
+        stop = self.LineEdit_3.text()
         ifband = self.LineEdit_4.text()
-        temp = self.LineEdit_5.text()
         averages = self.LineEdit_6.text()
         power = self.LineEdit_7.text()
         edelay = self.LineEdit_8.text()
         points = self.LineEdit_9.text()
         outputfile = self.LineEdit_10.text()
-        self.wr = write_conf.writeThread(IP, centerf, span, temp, averages, power, edelay, ifband, points, outputfile)
+        self.wr = write_conf.writeThread(IP, start, stop, averages, power, edelay, ifband, points, outputfile)
         self.wr.start()
-        self.save_path = ''
         self.statusBar.showMessage('保存配置成功！',10**5)
 
     def readconf(self):
@@ -159,12 +171,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.LineEdit_2.setText(a[1])
         self.LineEdit_3.setText(a[2])
         self.LineEdit_4.setText(a[3])
-        self.LineEdit_5.setText(a[4])
-        self.LineEdit_6.setText(a[5])
-        self.LineEdit_7.setText(a[6])
-        self.LineEdit_8.setText(a[7])
-        self.LineEdit_9.setText(a[8])
-        self.LineEdit_10.setText(a[9])
+        self.LineEdit_6.setText(a[4])
+        self.LineEdit_7.setText(a[5])
+        self.LineEdit_8.setText(a[6])
+        self.LineEdit_9.setText(a[7])
+        self.LineEdit_10.setText(a[8])
 
     def fail_dialog(self):
         warning_dialog(self,'shibai','you fail')
