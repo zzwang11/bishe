@@ -32,17 +32,19 @@ class Ui_MainWindow(object):
         self.gridLayout3.addWidget(self.line_3,3,0,1,3)
         self.widget = QtWidgets.QWidget(self.centralwidget)
 
-        self.widget.setMaximumSize(300,30)
+        self.widget.setMaximumSize(350,30)
         self.widget.setObjectName("widget")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.gridLayout3.addWidget(self.widget,4,2,1,1)
 
+        self.pushButton_11 = QtWidgets.QPushButton(self.widget)
+        self.pushButton_11.setMinimumHeight(25)
+        self.pushButton_11.setObjectName("pushButton_11")
+        self.horizontalLayout_2.addWidget(self.pushButton_11)
         self.pushButton_8 = QtWidgets.QPushButton(self.widget)
         self.pushButton_8.setMinimumHeight(25)
-
-
         self.pushButton_8.setObjectName("pushButton_8")
         self.horizontalLayout_2.addWidget(self.pushButton_8)
         self.pushButton_5 = QtWidgets.QPushButton(self.widget)
@@ -116,10 +118,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.addWidget(self.line)
 
         self.widget2 = QtWidgets.QWidget(self.splitter1)
-
         self.widget2.setMaximumSize(QtCore.QSize(500,2000))
         self.widget2.setMinimumSize(QtCore.QSize(300, 300))
-
         self.widget2.setObjectName("widget2")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.widget2)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -302,6 +302,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton_8.setText(_translate("MainWindow", "读取结果"))
+        self.pushButton_11.setText(_translate("MainWindow", "计算最终S21"))
         self.pushButton_5.setText(_translate("MainWindow", "保存结果"))
         # self.label_8.setText(_translate("MainWindow", "TextLabel"))
         self.pushButton.setText(_translate("MainWindow", "开始"))

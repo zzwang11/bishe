@@ -41,7 +41,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         '''第二种绘图方式'''
         plt2 = self.pyqtgraph1.addPlot(title='绘制多条线')
 
-        aa = plt2.plot(np.random.normal(size=150), pen=pg.mkPen(color='r', width=2),
+        aa = plt2.plot(np.random.normal(size=150), pen=pg.mkPen(color='r', width=5),
                   name="Red curve")
 
         plt2.plot(np.random.normal(size=110) + 5, pen=(0, 255, 0), name="Green curve")

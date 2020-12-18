@@ -4,7 +4,7 @@ from mywidget.MainWindowF import Ui_MainWindow
 from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread,QWaitCondition,Qt
 from PyQt5 import QtGui,QtCore
 from mywidget import connectPic, helpPage
-from tools import write_conf,read_conf,read_data
+from tools import write_conf,read_conf,read_data,result
 from dialog_util.dialogUtil import *
 from control_vna.control_suit import suit_cla
 from thread_exa.wait_thread import myThread
@@ -25,7 +25,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
         self.setupUi(self)
         # 状态栏
-
+        self.mak = 0
         self.preSet()
         self.qss()
 
@@ -43,9 +43,25 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         # 实现测量所需数据的保存和读取
         self.pushButton_6.clicked.connect(self.writeconf)
         self.pushButton_7.clicked.connect(self.readconf)
+        self.pushButton_8.clicked.connect(self.read_result)
+        self.pushButton_11.clicked.connect(self.jisuan)
         self.actionconnect.triggered.connect(self.con_pic)
         self.action5.triggered.connect(QCoreApplication.instance().quit)
         self.actionhelp.triggered.connect(self.helppage)
+
+    def read_result(self):
+        fileName1, filetype = QFileDialog.getOpenFileName(self, "选取文件","./save/","All Files (*);;Text Files (*.txt)")
+        with open(fileName1, 'r') as f:
+            a = f.read().split()
+        c = []
+        for i in a:
+            c.append(eval(i))
+        self.pyqtgraph1.clear()
+        self.c = self.pyqtgraph1.addPlot(title=self.state, pen=pg.mkPen(color='b'))
+        self.c.setLabel('left', "S21", units='dB')
+        self.c.setLabel('bottom', "频率", units='MHz')
+        self.c.setLogMode(x=False, y=False)
+        self.c.plot(y = c,pen=pg.mkPen(color='r', width=2))
 
     def buttonState(self):
         radioButton = self.sender()
@@ -54,11 +70,28 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             information_dialog(self, '提示', '请先进行连线测量，再进行天线测量')
             self.con_pic()
             self.pyqtgraph1.clear()
-            self.c = self.pyqtgraph1.addPlot(title=self.state, pen=pg.mkPen(color='b', width=5))
+            self.c = self.pyqtgraph1.addPlot(title=self.state, pen=pg.mkPen(color='b'))
             self.c.setLabel('left', "S21", units='dB')
             self.c.setLabel('bottom', "频率", units='MHz')
             self.c.setLogMode(x=False, y=False)
 
+    def jisuan(self):
+        with open('./save/1.txt', 'r') as f:
+            a = f.read().split()
+        with open('./save/2.txt', 'r') as f:
+            b = f.read().split()
+        c = []
+        for i in range(len(a)):
+            c.append(eval(b[i]) - eval(a[i]))
+        with open('./save/3.txt', 'w') as f:
+            for i in c:
+                f.write(str(i)+'\n')
+        self.pyqtgraph1.clear()
+        self.c = self.pyqtgraph1.addPlot(title=self.state, pen=pg.mkPen(color='b'))
+        self.c.setLabel('left', "S21", units='dB')
+        self.c.setLabel('bottom', "频率", units='MHz')
+        self.c.setLogMode(x=False, y=False)
+        self.c.plot(y = c,pen=pg.mkPen(color='r', width=2))
 
     def set_3d(self,a):
         tools.setcon.pic_3d(self,a)
@@ -102,29 +135,40 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
         # self.select_change(1)
         self.pyqtgraph1.clear()
-        self.c = self.pyqtgraph1.addPlot(title=self.state, pen=pg.mkPen(color='b', width=5))
+        self.c = self.pyqtgraph1.addPlot(title=self.state, pen=pg.mkPen(color='r', width=2))
         self.c.setLabel('left', "S21", units='dB')
         self.c.setLabel('bottom', "频率", units='MHz')
         self.c.setLogMode(x=False, y=False)
         self.statusBar.showMessage('测量中......',10**8)
         self.pushButton.setEnabled(False)
-        self.thread1 = myThread()
+        self.thread1 = myThread(self.state)
         self.thread1.start()
         # self.thread1.mySig.connect(lambda i:self.progressBar.setValue(i))
         self.thread1.mySig.connect(self.setbar)
         self.thread1.mySig1.connect(self.mat)
+        self.thread1.mySig2.connect(self.succ_dialog)
+        self.thread1.mySig2.connect(self.finish)
 
+    def finish(self):
+        self.mak += 1
+        self.pushButton.setEnabled(True)
+        self.statusBar.showMessage('测量完成',10**8)
 
     def mat(self):
-        with open('./save/1.txt','r') as f:
+        if self.state == "线缆连接测量":
+            path = './save/1.txt'
+            s = 1
+        else:
+            path = './save/2.txt'
+            s = 2
+
+        with open(path,'r') as f:
             a = f.read().split()
         li = []
-        li0 = []
         for i in a:
             li.append(eval(i))
-        for i in li:
-            li0.append(i**2)
-        self.c.plot(x = li,y = li0)
+
+        self.c.plot(y = li,pen=pg.mkPen(color='r', width=2))
 
     def setbar(self,a):
         self.progressBar.setValue(a*10)
@@ -181,13 +225,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         warning_dialog(self,'shibai','you fail')
 
     def succ_dialog(self):
-        information_dialog(self, 'cheng gong', 'you success')
+        information_dialog(self, '成功', '测量完成')
 
     def qss(self):
         self.pushButton_5.setStyleSheet('''QPushButton{background:rgb(100,149,237);border-radius:10px;}\
         QPushButton:hover{background:rgb(65,105,225);border-radius:10px;}''')
         self.pushButton_8.setStyleSheet('''QPushButton{background:rgb(100,149,237);border-radius:10px;}\
         QPushButton:hover{background:rgb(65,105,225);border-radius:10px;}''')
+        self.pushButton_11.setStyleSheet('''QPushButton{background:rgb(100,149,237);border-radius:10px;}\
+                QPushButton:hover{background:rgb(65,105,225);border-radius:10px;}''')
     # QApplication.processEvents()实现页面刷新
 
 
