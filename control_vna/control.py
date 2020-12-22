@@ -5,15 +5,15 @@ import os
 import math
 
 
-def pna_setup(pna, points: int, start: float, stop: float, ifband: float, power: float, edelay: float, averages: int):
+def pna_setup(pna, mod, points: int, start: float, stop: float, ifband: float, power: float, edelay: float, averages: int):
     """
     set parameters for the PNA for the sweep (number of points, center frequency, span of frequencies,
     IF bandwidth, power, electrical delay and number of averages)
     """
 
     # initial setup for measurement
-    if pna.query('CALC:PAR:CAT:EXT?') != '"Meas,S21"\n':
-        pna.write('CALCulate1:PARameter:DEFine:EXT \'Meas\',S21')
+    if pna.query('CALC:PAR:CAT:EXT?') != f'"Meas,{mod}"\n':
+        pna.write(f'CALCulate1:PARameter:DEFine:EXT \'Meas\',{mod}')
         pna.write('DISPlay:WINDow1:STATE ON')
         pna.write('DISPlay:WINDow1:TRACe1:FEED \'Meas\'')
         pna.write('DISPlay:WINDow1:TRACe2:FEED \'Meas\'')
@@ -36,7 +36,7 @@ def pna_setup(pna, points: int, start: float, stop: float, ifband: float, power:
     pna.write('SENSe1:AVERage:Count {}'.format(averages))
 
 
-def read_data(pna, points, outputfile, power):
+def read_data(pna, data, points, outputfile, power):
     """
     function to read in data from the pna and output it into a file
     """
@@ -49,13 +49,17 @@ def read_data(pna, points, outputfile, power):
     freq = np.linspace(float(pna.query('SENSe1:FREQuency:START?')), float(pna.query('SENSe1:FREQuency:STOP?')), points)
 
     # read in phase
-    # pna.write('CALCulate1:FORMat PHASe')
-    pna.write('CALCulate1:FORMat REAL')
+    if data == 'mag':
+        pna.write('CALCulate1:FORMat PHASe')
+    else:
+        pna.write('CALCulate1:FORMat REAL')
     re = pna.query_ascii_values('CALCulate1:DATA? FDATA', container=np.array)
 
     # read in mag
-    # pna.write('CALCulate1:FORMat MLOG')
-    pna.write('CALCulate1:FORMat IMAGinary')
+    if data == 'mag':
+        pna.write('CALCulate1:FORMat MLOG')
+    else:
+        pna.write('CALCulate1:FORMat IMAGinary')
     im = pna.query_ascii_values('CALCulate1:DATA? FDATA', container=np.array)
 
     # open output file and put data points into the file
@@ -71,7 +75,7 @@ def read_data(pna, points, outputfile, power):
     return file1
 
 
-def getdata(inst: str, start: float, stop: float, averages: int, power: float,
+def getdata(inst: str, mod: str, data: str, start: float, stop: float, averages: int, power: float,
             edelay: float, ifband: float, points: int, outputfile: str = "results.csv"):
     """
     function to get data and put it into a user specified file
@@ -86,7 +90,7 @@ def getdata(inst: str, start: float, stop: float, averages: int, power: float,
         inst = rm.open_resource(inst)
     except Exception:
         return 0
-    pna_setup(inst, points, start, stop, ifband, power, edelay, averages)
+    pna_setup(inst, mod, points, start, stop, ifband, power, edelay, averages)
 
     # start taking data for S21
     inst.write('CALCulate1:PARameter:SELect \'Meas\'')
@@ -96,12 +100,12 @@ def getdata(inst: str, start: float, stop: float, averages: int, power: float,
     # count = 10000000
     # while count > 0:
     #     count = count - 1
-    time.sleep(10)
+    time.sleep(1)
     while True:
         if inst.query('STAT:OPER:AVER1:COND?')[1] != "0":
             break
 
-    file1 = read_data(inst, points, outputfile, power)
+    file1 = read_data(inst, data, points, outputfile, power)
     inst.write("trace:clear")
     return file1
 

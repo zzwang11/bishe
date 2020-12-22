@@ -43,6 +43,8 @@ class MyTh(QThread):
         a = ReadConfig()
         b = []
         if self.param == ('test_all',):
+            mod = a.get('test_config', 'mod')
+            add = a.get('test_config', 'add')
             ip = a.get('test_config', 'ip')
             start = a.get('test_config', 'start')
             stop = a.get('test_config', 'stop')
@@ -52,6 +54,11 @@ class MyTh(QThread):
             edelay = a.get('test_config', 'edelay')
             points = a.get('test_config', 'points')
             outputfile = a.get('test_config', 'outputfile')
+            distance = a.get('test_config', 'distance')
+            r = a.get('test_config', 'r')
+            degree = a.get('test_config', 'degree')
+            b.append(mod)
+            b.append(add)
             b.append(ip)
             b.append(start)
             b.append(stop)
@@ -61,6 +68,9 @@ class MyTh(QThread):
             b.append(edelay)
             b.append(points)
             b.append(outputfile)
+            b.append(distance)
+            b.append(r)
+            b.append(degree)
         else:
             b.append(a.get(*self.param))
         self.myOut.emit(b)

@@ -1,10 +1,10 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QStatusBar, QSplitter, QDesktopWidget
-from mywidget.MainWindowF import Ui_MainWindow
+from mywidget.field_sys_win import Ui_MainWindow
 from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread,QWaitCondition,Qt
 from PyQt5 import QtGui,QtCore
-from mywidget import connectPic, helpPage
-from tools import write_conf,read_conf,read_data,result
+from mywidget import field_pic, helpPage
+from tools import write_conf,read_conf,read_data
 from dialog_util.dialogUtil import *
 from control_vna.control_suit import suit_cla
 from thread_exa.wait_thread import myThread
@@ -16,6 +16,7 @@ import numpy as np
 import tools.setcon
 import math
 import matplotlib.pyplot as plt
+import shutil
 
 
 class MyMainWindow(QMainWindow, Ui_MainWindow):
@@ -23,6 +24,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MyMainWindow, self).__init__(parent)
         self.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
+        self.setWindowTitle('归一化场地衰减测试')
         self.setupUi(self)
         # 状态栏
         self.mak = 0
@@ -41,6 +43,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_4.clicked.connect(self.go_on)
 
         # 实现测量所需数据的保存和读取
+        self.pushButton_5.clicked.connect(self.save_result)
         self.pushButton_6.clicked.connect(self.writeconf)
         self.pushButton_7.clicked.connect(self.readconf)
         self.pushButton_8.clicked.connect(self.read_result)
@@ -56,12 +59,22 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         c = []
         for i in a:
             c.append(eval(i))
+        self.result = c
         self.pyqtgraph1.clear()
-        self.c = self.pyqtgraph1.addPlot(title=self.state, pen=pg.mkPen(color='b'))
-        self.c.setLabel('left', "S21", units='dB')
+        self.c = self.pyqtgraph1.addPlot(title='最终的结果', pen=pg.mkPen(color='b'))
+        self.c.setLabel('left', "PL", units='dB')
         self.c.setLabel('bottom', "频率", units='MHz')
         self.c.setLogMode(x=False, y=False)
-        self.c.plot(y = c,pen=pg.mkPen(color='r', width=2))
+        self.c.plot(y=c, pen=pg.mkPen(color='r', width=2))
+
+    def save_result(self):
+        fileName2, ok2 = QFileDialog.getSaveFileName(None, "文件保存", "./", "Text Files (*.txt)")
+        try:
+            shutil.copy('e:/bishe/save/3.txt', fileName2)
+            information_dialog(self,'提示','保存成功')
+        except:
+            information_dialog(self,'提示','保存失败')
+
 
     def buttonState(self):
         radioButton = self.sender()
@@ -82,13 +95,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             b = f.read().split()
         c = []
         for i in range(len(a)):
-            c.append(eval(b[i]) - eval(a[i]))
+            c.append(eval(b[i]) - eval(a[i]) - eval(self.LineEdit_12))
         with open('./save/3.txt', 'w') as f:
             for i in c:
                 f.write(str(i)+'\n')
         self.pyqtgraph1.clear()
-        self.c = self.pyqtgraph1.addPlot(title=self.state, pen=pg.mkPen(color='b'))
-        self.c.setLabel('left', "S21", units='dB')
+        self.c = self.pyqtgraph1.addPlot(title='最终结果', pen=pg.mkPen(color='b'))
+        self.c.setLabel('left', "PL", units='dB')
         self.c.setLabel('bottom', "频率", units='MHz')
         self.c.setLogMode(x=False, y=False)
         self.c.plot(y = c,pen=pg.mkPen(color='r', width=2))
@@ -111,14 +124,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             os.mkdir(self.save_path)
 
 
-
-    # def select_change(self,i):
-    #     self.read = read_data.MyRD(self.path,'2')
-    #     self.read.start()
-    #     self.read.myOut.connect(self.set_2d)
-
     def con_pic(self):
-        self.pic = connectPic.picture()
+        self.pic = field_pic.picture()
         self.pic.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
         self.pic.show()
 
@@ -139,6 +146,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.c.setLabel('left', "S21", units='dB')
         self.c.setLabel('bottom', "频率", units='MHz')
         self.c.setLogMode(x=False, y=False)
+
         self.statusBar.showMessage('测量中......',10**8)
         self.pushButton.setEnabled(False)
         self.thread1 = myThread(self.state)
@@ -191,6 +199,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.statusBar.showMessage('测量结束！',10**8)
 
     def writeconf(self):
+        mod = self.LineEdit_11.text()
+        add = self.LineEdit_12.text()
         IP = self.LineEdit.text()
         start = self.LineEdit_2.text()
         stop = self.LineEdit_3.text()
@@ -200,7 +210,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         edelay = self.LineEdit_8.text()
         points = self.LineEdit_9.text()
         outputfile = self.LineEdit_10.text()
-        self.wr = write_conf.writeThread(IP, start, stop, averages, power, edelay, ifband, points, outputfile)
+        self.wr = write_conf.writeThread(mod, add, IP, start, stop, averages, power, edelay, ifband, points, outputfile)
         self.wr.start()
         self.statusBar.showMessage('保存配置成功！',10**5)
 
@@ -211,18 +221,20 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.statusBar.showMessage('从本地读取配置成功', 10**4)
 
     def set_text(self,a):
-        self.LineEdit.setText(a[0])
-        self.LineEdit_2.setText(a[1])
-        self.LineEdit_3.setText(a[2])
-        self.LineEdit_4.setText(a[3])
-        self.LineEdit_6.setText(a[4])
-        self.LineEdit_7.setText(a[5])
-        self.LineEdit_8.setText(a[6])
-        self.LineEdit_9.setText(a[7])
-        self.LineEdit_10.setText(a[8])
+        self.LineEdit_11.setText(a[0])
+        self.LineEdit_12.setText(a[1])
+        self.LineEdit.setText(a[2])
+        self.LineEdit_2.setText(a[3])
+        self.LineEdit_3.setText(a[4])
+        self.LineEdit_4.setText(a[5])
+        self.LineEdit_6.setText(a[6])
+        self.LineEdit_7.setText(a[7])
+        self.LineEdit_8.setText(a[8])
+        self.LineEdit_9.setText(a[9])
+        self.LineEdit_10.setText(a[10])
 
     def fail_dialog(self):
-        warning_dialog(self,'shibai','you fail')
+        warning_dialog(self,'失败','you fail')
 
     def succ_dialog(self):
         information_dialog(self, '成功', '测量完成')
@@ -232,8 +244,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         QPushButton:hover{background:rgb(65,105,225);border-radius:10px;}''')
         self.pushButton_8.setStyleSheet('''QPushButton{background:rgb(100,149,237);border-radius:10px;}\
         QPushButton:hover{background:rgb(65,105,225);border-radius:10px;}''')
-        self.pushButton_11.setStyleSheet('''QPushButton{background:rgb(100,149,237);border-radius:10px;}\
-                QPushButton:hover{background:rgb(65,105,225);border-radius:10px;}''')
+        self.pushButton_11.setStyleSheet('''QPushButton{background:rgb(255,192,203);border-radius:10px;}\
+                QPushButton:hover{background:rgb(255,182,193);border-radius:10px;}''')
     # QApplication.processEvents()实现页面刷新
 
 
