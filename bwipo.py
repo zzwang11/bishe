@@ -58,6 +58,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.teston = connect_test_win.connect_Test()
         self.teston.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
         self.teston.show()
+        self.teston.myout.connect(lambda i: self.LineEdit.setText(i))
 
     def read_result(self):
         fileName1, filetype = QFileDialog.getOpenFileName(self, "选取文件","./save/","All Files (*);;Text Files (*.txt)")

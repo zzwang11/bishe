@@ -1,5 +1,5 @@
 import os
-from PyQt5.QtCore import QThread,pyqtSignal
+from PyQt5.QtCore import QThread, pyqtSignal
 import pyvisa
 
 
@@ -8,7 +8,6 @@ class GetCon(QThread):
 
     def __init__(self):
         super().__init__()
-
 
     def run(self):
         rm = pyvisa.ResourceManager()

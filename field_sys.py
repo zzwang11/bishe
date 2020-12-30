@@ -125,6 +125,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.test = connect_test_win.connect_Test()
         self.test.setWindowIcon(QtGui.QIcon('e:/bishe/img/cartoon4.ico'))
         self.test.show()
+        self.teston.myout.connect(lambda i: self.LineEdit.setText(i))
 
 
     def con_pic(self):

@@ -7,7 +7,9 @@ from tools.test_connect import TestCon
 from tools.get_ins import GetCon
 from dialog_util.dialogUtil import *
 
+
 class connect_Test(QWidget):
+    myout = pyqtSignal(str)
     def __init__(self):
         super(connect_Test, self).__init__()
         self.initUI()
@@ -19,42 +21,45 @@ class connect_Test(QWidget):
         # self.width = QApplication.desktop().screenGeometry().width()
         # self.height = QApplication.desktop().screenGeometry().height()
         # self.resize(int(self.width//5), int(self.height/3))
-        self.resize(400,180)
-        self.setMaximumSize(400,180)
-        self.setMinimumSize(400,180)
+        self.resize(400, 180)
+        self.setMaximumSize(400, 180)
+        self.setMinimumSize(400, 180)
 
         self.radioButton = QtWidgets.QRadioButton()
         self.radioButton.setText("USB连接")
-        vbox.addWidget(self.radioButton,0,0,1,1)
+        vbox.addWidget(self.radioButton, 0, 0, 1, 1)
         self.radioButton_1 = QtWidgets.QRadioButton()
         self.radioButton_1.setText("GPIB连接")
-        vbox.addWidget(self.radioButton_1,0,1,1,1)
+        vbox.addWidget(self.radioButton_1, 0, 1, 1, 1)
         self.radioButton_2 = QtWidgets.QRadioButton()
         self.radioButton_2.setText("网线连接")
 
-        vbox.addWidget(self.radioButton_2,0,2,1,1)
+        vbox.addWidget(self.radioButton_2, 0, 2, 1, 1)
         self.pushButton1 = QtWidgets.QPushButton()
         self.pushButton1.setText('自动查询')
-        vbox.addWidget(self.pushButton1,0,3,1,1)
+        vbox.addWidget(self.pushButton1, 0, 3, 1, 1)
 
         self.line = QtWidgets.QFrame()
         self.line.setEnabled(False)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
-        vbox.addWidget(self.line,1,0,1,4)
+        vbox.addWidget(self.line, 1, 0, 1, 4)
         self.comb = QtWidgets.QComboBox(self)
         self.comb.addItems([])
-        vbox.addWidget(self.comb,2,0,1,4)
+        vbox.addWidget(self.comb, 2, 0, 1, 4)
 
         self.label = QLabel()
         self.label.setText('手动输入:')
-        vbox.addWidget(self.label,3,0,1,1)
+        vbox.addWidget(self.label, 3, 0, 1, 1)
         self.textlin = QLineEdit()
-        vbox.addWidget(self.textlin,3,1,1,3)
+        vbox.addWidget(self.textlin, 3, 1, 1, 3)
 
         self.pushButton = QtWidgets.QPushButton()
         self.pushButton.setText('测试连接')
-        vbox.addWidget(self.pushButton,4,3,1,1)
+        vbox.addWidget(self.pushButton, 4, 2, 1, 1)
+        self.pushButton2 = QtWidgets.QPushButton()
+        self.pushButton2.setText('保存地址')
+        vbox.addWidget(self.pushButton2, 4, 3, 1, 1)
 
         self.setLayout(vbox)
 
@@ -63,6 +68,7 @@ class connect_Test(QWidget):
         self.radioButton_2.toggled.connect(self.buttonState)
         self.pushButton.clicked.connect(self.conn)
         self.pushButton1.clicked.connect(self.conn1)
+        self.pushButton2.clicked.connect(self.savepath)
         self.comb.activated[str].connect(self.select)
 
     def conn1(self):
@@ -87,9 +93,7 @@ class connect_Test(QWidget):
         radioButton = self.sender()
         self.comb.clear()
         if radioButton.isChecked():
-            self.state=radioButton.text()
-
-
+            self.state = radioButton.text()
 
     def conn(self):
         self.a = TestCon(self.textlin.text())
@@ -101,6 +105,10 @@ class connect_Test(QWidget):
             information_dialog(self, '成功', '连接成功')
         else:
             information_dialog(self, '失败', '连接失败')
+
+    def savepath(self):
+        self.myout.emit(self.textlin.text())
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
