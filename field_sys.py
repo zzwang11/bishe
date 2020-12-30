@@ -122,7 +122,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             os.mkdir(self.save_path)
 
     def test_con(self):
-        self.test = connect_test_win.connect_Test()
+        self.test = connect_test_win.ConnectTest()
         self.test.setWindowIcon(QtGui.QIcon('e:/bishe/img/cartoon4.ico'))
         self.test.show()
         self.teston.myout.connect(lambda i: self.LineEdit.setText(i))

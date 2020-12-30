@@ -8,14 +8,14 @@ from tools.get_ins import GetCon
 from dialog_util.dialogUtil import *
 
 
-class connect_Test(QWidget):
+class ConnectTest(QWidget):
     myout = pyqtSignal(str)
+
     def __init__(self):
-        super(connect_Test, self).__init__()
+        super(ConnectTest, self).__init__()
         self.initUI()
 
     def initUI(self):
-
         vbox = QGridLayout(self)
         self.setWindowTitle('连接')
         # self.width = QApplication.desktop().screenGeometry().width()
@@ -112,6 +112,6 @@ class connect_Test(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    demo = connect_Test()
+    demo = ConnectTest()
     demo.show()
     sys.exit(app.exec_())

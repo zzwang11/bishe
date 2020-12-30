@@ -55,7 +55,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.actionhelp.triggered.connect(self.helppage)
 
     def test_con(self):
-        self.teston = connect_test_win.connect_Test()
+        self.teston = connect_test_win.ConnectTest()
         self.teston.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
         self.teston.show()
         self.teston.myout.connect(lambda i: self.LineEdit.setText(i))
