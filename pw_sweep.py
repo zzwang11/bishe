@@ -1,12 +1,11 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QStatusBar, QSplitter, QDesktopWidget
-from mywidget.MainWindowPW import Ui_MainWindow
-from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread,QWaitCondition,Qt
-from PyQt5 import QtGui,QtCore
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QStatusBar
+from useless.widget.MainWindowPW import Ui_MainWindow
+from PyQt5.QtCore import QCoreApplication
+from PyQt5 import QtGui
 from mywidget import field_pic, helpPage
-from tools import write_conf,read_conf,read_data
+from tools import write_conf,read_conf
 from dialog_util.dialogUtil import *
-from control_vna.control_suit import suit_cla
 from thread_exa.wait_thread import myThread
 import os
 import pyqtgraph as pg
@@ -124,7 +123,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.pic.show()
 
     def helppage(self):
-        self.help_page = helpPage.mainwindow()
+        self.help_page = helpPage.Splitter()
         self.help_page.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
         self.help_page.show()
 

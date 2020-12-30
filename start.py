@@ -1,7 +1,7 @@
 import field_sys
 import bwipo
 import nsa
-import vswr
+import svswr
 import sys
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -68,7 +68,6 @@ class Choice(QDialog) :
             window3.show()
         elif b == 'vswr':
             window4.show()
-
         main.close()
 
 
@@ -77,7 +76,7 @@ if __name__ == '__main__':
     window1 = field_sys.MyMainWindow()
     window2 = bwipo.MyMainWindow()
     window3 = nsa.MyMainWindow()
-    window4 = vswr.MyMainWindow()
+    window4 = svswr.MyMainWindow()
 
     main = Choice()
     main.show()

@@ -4,6 +4,8 @@ import time
 # 线程锁
 qmute = QMutex()
 condi = QWaitCondition()
+
+
 class myThread(QThread):
     mySig = pyqtSignal(int)
     mySig1 = pyqtSignal()

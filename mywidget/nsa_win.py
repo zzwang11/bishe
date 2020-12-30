@@ -227,6 +227,10 @@ class Ui_MainWindow(object):
         self.pushButton_7.setObjectName("pushButton_7")
         self.pushButton_7.setMaximumWidth(180)
         self.horizontalLayout_3.addWidget(self.pushButton_7)
+        self.pushButton_9 = QtWidgets.QPushButton(self.widget2)
+        self.pushButton_9.setObjectName("pushButton_9")
+        self.pushButton_9.setMaximumWidth(180)
+        self.horizontalLayout_3.addWidget(self.pushButton_9)
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
 
 
@@ -317,7 +321,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "归一化场地衰减测试"))
         self.pushButton_8.setText(_translate("MainWindow", "读取结果"))
-        self.pushButton_11.setText(_translate("MainWindow", "计算最终路径损耗"))
+        self.pushButton_11.setText(_translate("MainWindow", "计算最终NSA"))
         self.pushButton_5.setText(_translate("MainWindow", "保存结果"))
         self.Label_11.setText(_translate("MainWindow", "模式"))
         self.Label_12.setText(_translate("MainWindow", "天线增益"))
@@ -341,9 +345,10 @@ class Ui_MainWindow(object):
         self.Label_6.setText(_translate("MainWindow", "平均次数:"))
         self.Label_3.setText(_translate("MainWindow", "终止频率:"))
         self.label.setText(_translate("MainWindow", "MHz"))
-        self.Label.setText(_translate("MainWindow", "IP:"))
+        self.Label.setText(_translate("MainWindow", "地址:"))
         self.pushButton_6.setText(_translate("MainWindow", "保存设置"))
         self.pushButton_7.setText(_translate("MainWindow", "读取设置"))
+        self.pushButton_9.setText(_translate("MainWindow", "测试连接"))
         self.menu.setTitle(_translate("MainWindow", "开始"))
         self.menu_3.setTitle(_translate("MainWindow", "帮助"))
         self.menu_4.setTitle(_translate("MainWindow", "设置"))

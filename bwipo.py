@@ -3,17 +3,15 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox,
 from mywidget.bwipo_win import Ui_MainWindow
 from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread,QWaitCondition,Qt
 from PyQt5 import QtGui,QtCore
-from mywidget import bwipo_pic, helpPage
+from mywidget import bwipo_pic, helpPage, connect_test_win
 from tools import write_conf,read_conf,read_data
 from dialog_util.dialogUtil import *
-
+from control_vna.control_suit import suit_cla
 from thread_exa.wait_thread import myThread
 import os
 import math
 import pyqtgraph as pg
-
 import tools.setcon
-
 import shutil
 
 
@@ -44,10 +42,22 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_6.clicked.connect(self.writeconf)
         self.pushButton_7.clicked.connect(self.readconf)
         self.pushButton_8.clicked.connect(self.read_result)
+        self.pushButton_9.clicked.connect(self .test_con)
         self.pushButton_11.clicked.connect(self.jisuan)
         self.actionconnect.triggered.connect(self.con_pic)
+        self.actionopen.triggered.connect(self.read_result)
+        self.action1.triggered.connect(self.measure)
+        self.action2.triggered.connect(self.pause)
+        self.action3.triggered.connect(self.terminate_m)
+        self.action4.triggered.connect(self.save_result)
+        self.action.triggered.connect(self.go_on)
         self.action5.triggered.connect(QCoreApplication.instance().quit)
         self.actionhelp.triggered.connect(self.helppage)
+
+    def test_con(self):
+        self.teston = connect_test_win.connect_Test()
+        self.teston.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
+        self.teston.show()
 
     def read_result(self):
         fileName1, filetype = QFileDialog.getOpenFileName(self, "选取文件","./save/","All Files (*);;Text Files (*.txt)")
@@ -71,7 +81,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             information_dialog(self,'提示','保存成功')
         except:
             information_dialog(self,'提示','保存失败')
-
 
     def buttonState(self):
         radioButton = self.sender()
@@ -134,7 +143,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.pic.show()
 
     def helppage(self):
-        self.help_page = helpPage.mainwindow()
+        self.help_page = helpPage.Splitter()
         self.help_page.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
         self.help_page.show()
 
@@ -177,12 +186,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
     def setbar(self,a):
         self.progressBar.setValue(a*10)
 
-
     def pause(self):
         self.thread1.pause()
         self.statusBar.showMessage('暂停测量',10**8)
         self.graph.show()
-
 
     def go_on(self):
         self.thread1.goon()
