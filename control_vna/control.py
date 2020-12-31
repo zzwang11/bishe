@@ -100,13 +100,14 @@ def getdata(inst: str, mod: str, data: str, start: float, stop: float, averages:
     # count = 10000000
     # while count > 0:
     #     count = count - 1
-    time.sleep(1)
+    time.sleep(5)
     while True:
         if inst.query('STAT:OPER:AVER1:COND?')[1] != "0":
             break
 
     file1 = read_data(inst, data, points, outputfile, power)
     inst.write("trace:clear")
+    inst.close()
     return file1
 
 

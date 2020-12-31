@@ -65,6 +65,7 @@ class suit_cla(QThread):
             self.mySig.emit(100)
 
 
+
     def pause(self):
         self.flag = True
 
