@@ -3,6 +3,7 @@ import bwipo
 import nsa
 import svswr
 import sys
+from mywidget import connect_test_win
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *

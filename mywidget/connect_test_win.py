@@ -16,51 +16,68 @@ class ConnectTest(QWidget):
         self.initUI()
 
     def initUI(self):
+        self.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
         gbox = QGridLayout(self)
         self.setWindowTitle('连接')
         # self.width = QApplication.desktop().screenGeometry().width()
         # self.height = QApplication.desktop().screenGeometry().height()
         # self.resize(int(self.width//5), int(self.height/3))
-        self.resize(400, 180)
-        self.setMaximumSize(400, 180)
-        self.setMinimumSize(400, 180)
+        self.resize(800, 400)
+        self.setMaximumSize(800, 400)
+        self.setMinimumSize(800, 400)
+
+        self.label = QLabel(self)
+        self.label.setText("显示图片")
+        self.label.setFixedSize(780, 200)
+        self.label.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+
+        self.label.setStyleSheet("QLabel{background:white;}"
+                                 "QLabel{color:rgb(300,300,300,120);font-size:20px;font-weight:bold;font-family:宋体;}"
+                                 "QLabel{alignment:AlignHCenter,AlignVCenter}"
+                                 )
+        gbox.addWidget(self.label, 0, 0, 2, 4)
+
+        # jpg = QtGui.QPixmap('../img/disconnect.jpg').scaled(self.label.width(), self.label.height())
+        jpg = QtGui.QPixmap('e:/bishe/img/disconnect.jpg')
+        self.label.setPixmap(jpg)
 
         self.radioButton = QtWidgets.QRadioButton()
         self.radioButton.setText("USB连接")
-        gbox.addWidget(self.radioButton, 0, 0, 1, 1)
+        gbox.addWidget(self.radioButton, 2, 0, 1, 1)
         self.radioButton_1 = QtWidgets.QRadioButton()
         self.radioButton_1.setText("GPIB连接")
-        gbox.addWidget(self.radioButton_1, 0, 1, 1, 1)
+        gbox.addWidget(self.radioButton_1, 2, 1, 1, 1)
         self.radioButton_2 = QtWidgets.QRadioButton()
         self.radioButton_2.setText("网线连接")
-        gbox.addWidget(self.radioButton_2, 0, 2, 1, 1)
+        gbox.addWidget(self.radioButton_2, 2, 2, 1, 1)
         self.pushButton1 = QtWidgets.QPushButton()
-        self.pushButton1.setText('自动查询')
-        gbox.addWidget(self.pushButton1, 0, 3, 1, 1)
+        self.pushButton1.setText('查询')
+        gbox.addWidget(self.pushButton1, 2, 3, 1, 1)
 
         self.line = QtWidgets.QFrame()
         self.line.setEnabled(False)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
-        gbox.addWidget(self.line, 1, 0, 1, 4)
+        gbox.addWidget(self.line, 3, 0, 1, 4)
         self.comb = QtWidgets.QComboBox(self)
         self.comb.addItems([])
-        gbox.addWidget(self.comb, 2, 0, 1, 4)
+        gbox.addWidget(self.comb, 4, 0, 1, 4)
 
-        self.label = QLabel()
-        self.label.setText('手动输入:')
-        gbox.addWidget(self.label, 3, 0, 1, 1)
+        self.label1 = QLabel()
+        self.label1.setText('手动输入:')
+        gbox.addWidget(self.label1, 5, 0, 1, 1)
         self.textlin = QLineEdit()
-        gbox.addWidget(self.textlin, 3, 1, 1, 3)
+        gbox.addWidget(self.textlin, 5, 1, 1, 3)
 
         self.pushButton = QtWidgets.QPushButton()
         self.pushButton.setText('测试连接')
-        gbox.addWidget(self.pushButton, 4, 2, 1, 1)
+        gbox.addWidget(self.pushButton, 6, 2, 1, 1)
         self.pushButton2 = QtWidgets.QPushButton()
         self.pushButton2.setText('保存地址')
-        gbox.addWidget(self.pushButton2, 4, 3, 1, 1)
+        gbox.addWidget(self.pushButton2, 6, 3, 1, 1)
 
         self.setLayout(gbox)
+        self.pushButton1.setEnabled(False)
 
         self.radioButton.toggled.connect(self.buttonState)
         self.radioButton_1.toggled.connect(self.buttonState)
@@ -89,6 +106,7 @@ class ConnectTest(QWidget):
         self.textlin.setText(self.ins)
 
     def buttonState(self):
+        self.pushButton1.setEnabled(True)
         radioButton = self.sender()
         self.comb.clear()
         if radioButton.isChecked():
@@ -102,11 +120,22 @@ class ConnectTest(QWidget):
     def jug(self, i):
         if i == 1:
             information_dialog(self, '成功', '连接成功')
+            jpg = QtGui.QPixmap('e:/bishe/img/connect.jpg')
+            self.label.setPixmap(QPixmap(""))
+            self.label.setPixmap(jpg)
+
         else:
             information_dialog(self, '失败', '连接失败')
+            jpg = QtGui.QPixmap('e:/bishe/img/disconn.jpg')
+            self.label.setPixmap(QPixmap(""))
+            self.label.setPixmap(jpg)
+
 
     def savepath(self):
         self.myout.emit(self.textlin.text())
+        aa = self.textlin.text()
+
+
 
 
 if __name__ == '__main__':

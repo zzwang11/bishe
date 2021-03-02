@@ -1,6 +1,6 @@
 import configparser
 import os
-from PyQt5.QtCore import QThread,pyqtSignal
+from PyQt5.QtCore import QThread, pyqtSignal
 
 
 class ReadConfig:
@@ -22,10 +22,10 @@ class ReadConfig:
             value = "未读取到"
         return value
 
-    def set(self, *param):
+    def setter(self, *param):
         try:
             self.cf.set(*param)
-            self.cf.write(open(self.configpath,'w'))
+            self.cf.write(open(self.configpath, 'w'))
             a = 0
         except:
             a = "写入失败"
@@ -74,5 +74,3 @@ class MyTh(QThread):
         else:
             b.append(a.get(*self.param))
         self.myOut.emit(b)
-
-
