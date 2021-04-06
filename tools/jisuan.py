@@ -13,8 +13,16 @@ class Js(QThread):
             a = f.read().split()
         with open('./save/2.txt', 'r') as f:
             b = f.read().split()
-        c = []
+        with open('./save/3.txt', 'r') as f:
+            c = f.read().split()
+        with open('./save/4.txt', 'r') as f:
+            d = f.read().split()
+        with open('./save/5.txt', 'r') as f:
+            e = f.read().split()
+        with open('./save/6.txt', 'r') as f:
+            g = f.read().split()
+        li = []
         for i in range(len(a)):
-            c.append(eval(b[i]) - eval(a[i]))
-        with open('./save/3.txt', 'w') as f:
-            f.write(c)
+            li.append(max(eval(b[i]),eval(a[i]),eval(c[i])))
+
+        self.myOut.emit(li)

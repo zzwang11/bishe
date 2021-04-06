@@ -3,7 +3,7 @@ from PyQt5.QtCore import QThread,pyqtSignal
 
 
 class Result(QThread):
-    myOut = pyqtSignal(list)
+    myOut = pyqtSignal(list,list)
 
     def __init__(self, filepath):
         super().__init__()
@@ -12,6 +12,15 @@ class Result(QThread):
     def run(self):
         with open(self.filepath, 'r') as f:
             a = f.read()
-        b = a.split()
-        c = [int(i) for i in b]
-        self.myOut.emit(c)
+        s = a.split()
+        i = 0
+        l = []
+        li = []
+        while i < len(s):
+            if i % 2 == 0:
+                l.append(float(s[i]))
+            else:
+                li.append(float(s[i]))
+            i+=1
+
+        self.myOut.emit(l,li)

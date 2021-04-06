@@ -5,23 +5,27 @@ from PyQt5.QtCore import *
 import sys
 from tools.test_connect import TestCon
 from tools.get_ins import GetCon
+from tools import write_conf
 from dialog_util.dialogUtil import *
+
+import nsa
+import field_sys
+import start
+import svswr
 
 
 class ConnectTest(QWidget):
-    myout = pyqtSignal(str)
-
-    def __init__(self):
+    myout = pyqtSignal(int)
+    def __init__(self, win1=''):
         super(ConnectTest, self).__init__()
         self.initUI()
+        self.win1 = win1
 
     def initUI(self):
-        self.setWindowIcon(QtGui.QIcon('./img/cartoon4.ico'))
+        self.setWindowIcon(QtGui.QIcon('e:/bishe/img/icon.ico'))
         gbox = QGridLayout(self)
         self.setWindowTitle('连接')
-        # self.width = QApplication.desktop().screenGeometry().width()
-        # self.height = QApplication.desktop().screenGeometry().height()
-        # self.resize(int(self.width//5), int(self.height/3))
+
         self.resize(800, 400)
         self.setMaximumSize(800, 400)
         self.setMinimumSize(800, 400)
@@ -36,9 +40,7 @@ class ConnectTest(QWidget):
                                  "QLabel{alignment:AlignHCenter,AlignVCenter}"
                                  )
         gbox.addWidget(self.label, 0, 0, 2, 4)
-
-        # jpg = QtGui.QPixmap('../img/disconnect.jpg').scaled(self.label.width(), self.label.height())
-        jpg = QtGui.QPixmap('e:/bishe/img/disconnect.jpg')
+        jpg = QtGui.QPixmap('e:/bishe/img/disconn.jpg')
         self.label.setPixmap(jpg)
 
         self.radioButton = QtWidgets.QRadioButton()
@@ -118,28 +120,35 @@ class ConnectTest(QWidget):
         self.a.myOut.connect(self.jug)
 
     def jug(self, i):
-        if i == 1:
+        if i == 0:
             information_dialog(self, '成功', '连接成功')
+            self.myout.emit(1)
             jpg = QtGui.QPixmap('e:/bishe/img/connect.jpg')
             self.label.setPixmap(QPixmap(""))
             self.label.setPixmap(jpg)
 
         else:
             information_dialog(self, '失败', '连接失败')
+            self.myout.emit(0)
             jpg = QtGui.QPixmap('e:/bishe/img/disconn.jpg')
             self.label.setPixmap(QPixmap(""))
             self.label.setPixmap(jpg)
 
-
     def savepath(self):
-        self.myout.emit(self.textlin.text())
         aa = self.textlin.text()
-
-
+        self.wr = write_conf.writeThread(ip=aa)
+        self.wr.start()
+        if self.win1:
+            self.win1.show()
+        self.close()
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    demo = ConnectTest()
+    window1 = field_sys.MyMainWindow()
+    window3 = nsa.MyMainWindow()
+    window4 = svswr.MyMainWindow()
+    win1 = start.Choice(window1, window3, window4)
+    demo = ConnectTest(win1)
     demo.show()
     sys.exit(app.exec_())

@@ -1,17 +1,16 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QStatusBar, QSplitter, QDesktopWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QStatusBar
 from mywidget.bwipo_win import Ui_MainWindow
-from PyQt5.QtCore import QCoreApplication, pyqtSignal, QTimer,QMutex,QThread,QWaitCondition,Qt
-from PyQt5 import QtGui,QtCore
+from PyQt5.QtCore import QCoreApplication
+from PyQt5 import QtGui
 from mywidget import bwipo_pic, helpPage, connect_test_win
-from tools import write_conf,read_conf,read_data
+from tools import write_conf,read_conf
 from dialog_util.dialogUtil import *
-from control_vna.control_suit import suit_cla
-from thread_exa.wait_thread import myThread
+from tools.thread_exa.wait_thread import myThread
 import os
 import math
 import pyqtgraph as pg
-import tools.setcon
+import tools.set_pic
 import shutil
 
 
@@ -25,11 +24,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.mak = 0
         self.preSet()
         self.qss()
-
-
-        # 绑定模式
-        # self.radioButton.toggled.connect(self.buttonState)
-        # self.radioButton_2.toggled.connect(self.buttonState)
 
         # 实现测量开始、暂停、继续、停止
         self.pushButton.clicked.connect(self.measure)
@@ -121,10 +115,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.c.plot(y=c, pen=pg.mkPen(color='r', width=2))
 
     def set_3d(self, a):
-        tools.setcon.pic_3d(self,a)
+        tools.set_pic.pic_3d(self, a)
 
     def set_2d(self, a):
-        tools.setcon.pic_2d(self,a)
+        tools.set_pic.pic_2d(self, a)
 
     def preSet(self):
         self.statusBar = QStatusBar()

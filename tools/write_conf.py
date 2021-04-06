@@ -3,9 +3,11 @@ from PyQt5.QtCore import QThread
 
 
 class writeThread(QThread):
-    def __init__(self, mod='', add='', ip='', start='', stop='', averages='', power='', edelay='', ifband='', points='',
-                 outputfile='', distance='', r='', degree=''):
+    def __init__(self, path='', mod='', add='', ip='', start='', stop='', averages='', power='', edelay='', ifband='',
+                 points='',
+                 outputfile='', distance=''):
         super().__init__()
+        self.path = path
         self.mod = mod
         self.add = add
         self.ip = ip
@@ -18,8 +20,7 @@ class writeThread(QThread):
         self.points = points
         self.outputfile = outputfile
         self.distance = distance
-        self.r = r
-        self.degree = degree
+
 
     def run(self):
         conf = ReadConfig()
@@ -47,7 +48,4 @@ class writeThread(QThread):
             conf.setter('test_config', 'outputfile', self.outputfile)
         if self.distance != '':
             conf.setter('test_config', 'distance', self.distance)
-        if self.r != '':
-            conf.setter('test_config', 'r', self.r)
-        if self.degree != '':
-            conf.setter('test_config', 'degree', self.degree)
+

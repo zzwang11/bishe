@@ -2,16 +2,16 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QStatusBar
 from mywidget.field_sys_win import Ui_MainWindow
 from PyQt5.QtCore import QCoreApplication
-from PyQt5 import QtGui, QtCore
+from PyQt5 import QtGui
 from mywidget import field_pic, helpPage, connect_test_win
-from tools import write_conf, read_conf, read_data, test_connect
+from tools import write_conf, read_conf, test_connect, result
 from dialog_util.dialogUtil import *
-from control_vna.control_suit import suit_cla
-from thread_exa.wait_thread import myThread
+from tools.thread_exa.wait_thread import myThread
 import os
 import pyqtgraph as pg
-import tools.setcon
+import tools.set_pic
 import shutil
+import random, math
 
 icon = 'e:/bishe/img/icon.ico'
 
@@ -22,9 +22,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         super(MyMainWindow, self).__init__(parent)
         self.setWindowIcon(QtGui.QIcon(icon))
         self.setupUi(self)
+        self.staus0 = 3
         # 状态栏
         self.mak = 0
-        self.blueBtn = '''QPushButton{background:rgb(100,149,237);border-radius:10px;}\
+        self.blueBtn = '''QPushButton{background:rgb(100,149,237);border-radius:10px;border-width:3px;border-color:gray;}\
         QPushButton:hover{background:rgb(65,105,225);border-radius:10px;}'''
         self.blueBtn1 = '''QPushButton{background:rgb(100,149,237);border-radius:2px;}\
         QPushButton:hover{background:rgb(65,105,225);border-radius:2px;}'''
@@ -33,10 +34,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.preSet()
         self.qss()
 
-        self.test_con()
+        # self.test_con()
         # 绑定模式
-        self.radioButton.toggled.connect(self.buttonState)
-        self.radioButton_2.toggled.connect(self.buttonState)
 
         # 实现测量开始、暂停、继续、停止
         self.pushButton.clicked.connect(self.measure)
@@ -49,32 +48,110 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_6.clicked.connect(self.writeconf)
         self.pushButton_7.clicked.connect(self.readconf)
         self.pushButton_8.clicked.connect(self.read_result)
-        self.pushButton_9.clicked.connect(self.test_con)
-        self.pushButton_11.clicked.connect(self.jisuan)
-        self.actionconnect.triggered.connect(self.con_pic)
+        self.pushButton_9.clicked.connect(self.save_config)
+        self.pushButton_11.clicked.connect(self.restart)
+        self.pushButton_12.clicked.connect(self.next1)
+        self.pushButton_13.clicked.connect(self.pre2)
+        self.pushButton_14.clicked.connect(self.next2)
+        self.pushButton_15.clicked.connect(self.next0)
+        self.pushButton_16.clicked.connect(self.pre3)
+        self.pushButton_17.clicked.connect(self.next3)
+        self.pushButton_18.clicked.connect(self.pre4)
+        self.pushButton_19.clicked.connect(self.next4)
+        self.pushButton_27.clicked.connect(self.save_result)
+        self.pbtn1.clicked.connect(self.test_con)
+        self.actionconnect.triggered.connect(self.test_con1)
         self.actionopen.triggered.connect(self.read_result)
         self.action1.triggered.connect(self.measure)
         self.action2.triggered.connect(self.pause)
         self.action3.triggered.connect(self.terminate_m)
         self.action4.triggered.connect(self.save_result)
+        self.action7.triggered.connect(self.restart)
         self.action.triggered.connect(self.go_on)
         self.action5.triggered.connect(QCoreApplication.instance().quit)
         self.actionhelp.triggered.connect(self.helppage)
 
+    def next1(self):
+        self.widget1.show()
+        self.widget3.hide()
+        self.staus0 = 3
+        self.label_8.setText('测量RX线缆')
+
+    def next0(self):
+        self.widget1.hide()
+        self.pyqtgraph1.clear()
+        if self.staus0 == 3:
+            self.widget4.show()
+        elif self.staus0 == 4:
+            self.widget5.show()
+        elif self.staus0 == 5:
+            self.widget6.show()
+        elif self.staus0 == 6:
+            self.widget7.show()
+
+    def pre2(self):
+        self.widget4.hide()
+        self.widget3.show()
+        self.staus0 = 3
+
+    def next2(self):
+        self.widget4.hide()
+        self.widget1.show()
+        self.pyqtgraph1.clear()
+        self.staus0 = 4
+        self.label_8.setText('测量TX线缆')
+
+    def next3(self):
+        self.widget5.hide()
+        self.widget1.show()
+        self.pyqtgraph1.clear()
+        self.staus0 = 5
+        self.label_8.setText('参考天线测量')
+
+    def pre3(self):
+        self.widget5.hide()
+        self.widget4.show()
+        self.staus0 = 4
+
+    def next4(self):
+        self.widget6.hide()
+        self.widget1.show()
+        self.pyqtgraph1.clear()
+        self.staus0 = 6
+        self.label_8.setText('转台天线测量')
+
+    def pre4(self):
+        self.widget6.hide()
+        self.widget5.show()
+        self.staus0 = 5
+
+    def restart(self):
+        self.widget1.hide()
+        self.widget5.hide()
+        self.widget4.hide()
+        self.widget6.hide()
+        self.widget7.hide()
+        self.widget3.show()
+
     def read_result(self):
         fileName1, filetype = QFileDialog.getOpenFileName(self, "选取文件", "./save/", "All Files (*);;Text Files (*.txt)")
-        with open(fileName1, 'r') as f:
-            a = f.read().split()
-        c = []
-        for i in a:
-            c.append(eval(i))
-        self.result = c
+        self.re = result.Result(fileName1)
+        self.re.start()
+        self.re.myOut[list,list].connect(self.res)
+
+    def res(self,l,li):
+        self.widget1.hide()
+        self.widget5.hide()
+        self.widget4.hide()
+        self.widget6.hide()
+        self.widget7.show()
+        self.widget3.hide()
         self.pyqtgraph1.clear()
-        self.c = self.pyqtgraph1.addPlot(title='最终的结果', pen=pg.mkPen(color='b'))
-        self.c.setLabel('left', "PL", units='dB')
-        self.c.setLabel('bottom', "频率", units='MHz')
+        self.c = self.pyqtgraph2.addPlot(title='', pen=pg.mkPen(color='b'))
+        self.c.setLabel('left', "S21", units='dB')
+        self.c.setLabel('bottom', "频率", units='Hz')
         self.c.setLogMode(x=False, y=False)
-        self.c.plot(y=c, pen=pg.mkPen(color='r', width=2))
+        self.c.plot(x=l, y=li, pen=pg.mkPen(color='r', width=2))
 
     def save_result(self):
         fileName2, ok2 = QFileDialog.getSaveFileName(None, "文件保存", "./", "Text Files (*.txt)")
@@ -83,18 +160,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             information_dialog(self, '提示', '保存成功')
         except:
             information_dialog(self, '提示', '保存失败')
-
-    def buttonState(self):
-        radioButton = self.sender()
-        if radioButton.isChecked():
-            self.state = radioButton.text()
-            information_dialog(self, '提示', '请先进行连线测量，再进行天线测量')
-            self.con_pic()
-            self.pyqtgraph1.clear()
-            self.c = self.pyqtgraph1.addPlot(title=self.state, pen=pg.mkPen(color='b'))
-            self.c.setLabel('left', "S21", units='dB')
-            self.c.setLabel('bottom', "频率", units='MHz')
-            self.c.setLogMode(x=False, y=False)
 
     def jisuan(self):
         with open('./save/1.txt', 'r') as f:
@@ -115,14 +180,14 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.c.plot(y=c, pen=pg.mkPen(color='r', width=2))
 
     def set_2d(self, a):
-        tools.setcon.pic_2d(self, a)
+        tools.set_pic.pic_2d(self, a)
 
     def preSet(self):
         self.statusBar = QStatusBar()
         self.setStatusBar(self.statusBar)
-        self.progressBar.setValue(0)
-        self.readconf()
-        self.path = './save'
+        self.progressBar.setValue(100)
+        self.readdefconf()
+        self.path = 'e:/bishe'
         self.state = "线缆连接测量"
         self.save_path = 'd://save//'
         if not os.path.exists(self.save_path):
@@ -133,7 +198,26 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.test.setWindowIcon(QtGui.QIcon(icon))
         self.test.show()
         self.test.setFocus()
-        self.test.myout.connect(lambda i: self.LineEdit.setText(i))
+        self.test.myout.connect(self.connect)
+
+    def test_con1(self):
+        self.test1 = test_connect.TestCon(self.LineEdit.text())
+        self.test1.start()
+        self.test1.myOut.connect(self.connect)
+
+    def connect(self, i):
+        if i == 1:
+            jpg5 = QtGui.QPixmap('e:/bishe/img/dui.jpg').scaled(48, 48)
+            information_dialog(self, '成功', '连接成功')
+            self.lab1.setPixmap(jpg5)
+            self.lab2.setText('检测连接成功')
+            self.lab2.setStyleSheet("QLabel{color:rgb(0,255,0)}")
+        else:
+            jpg5 = QtGui.QPixmap('e:/bishe/img/cha.jpg').scaled(48, 48)
+            information_dialog(self, '失败', '连接失败')
+            self.lab1.setPixmap(jpg5)
+            self.lab2.setText('检测到未成功')
+            self.lab2.setStyleSheet("QLabel{color:rgb(255,0,0)}")
 
     def con_pic(self):
         self.pic = field_pic.picture()
@@ -146,22 +230,18 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.help_page.show()
 
     def get_con(self):
-        try:
-            mod = self.LineEdit_11.text()
-            add = self.LineEdit_12.text()
-            IP = self.LineEdit.text()
-            start = self.LineEdit_2.text()
-            stop = self.LineEdit_3.text()
-            ifband = self.LineEdit_4.text()
-            averages = self.LineEdit_6.text()
-            power = self.LineEdit_7.text()
-            edelay = self.LineEdit_8.text()
-            points = self.LineEdit_9.text()
-            outputfile = self.LineEdit_10.text()
-            li = [mod, add, IP, start, stop, ifband, averages, power, edelay, points, outputfile]
-        except:
-            li = []
-            print('read error!')
+        mod = self.LineEdit_11.text()
+        add = self.LineEdit_12.text()
+        IP = self.LineEdit.text()
+        start = self.LineEdit_2.text()
+        stop = self.LineEdit_3.text()
+        ifband = self.LineEdit_4.text()
+        averages = self.LineEdit_6.text()
+        power = self.LineEdit_7.text()
+        edelay = self.LineEdit_8.text()
+        points = self.LineEdit_9.text()
+        outputfile = self.LineEdit_10.text()
+        li = [mod, add, IP, start, stop, ifband, averages, power, edelay, points, outputfile]
         return li
 
     def measure(self):
@@ -170,7 +250,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         # self.thread_exa.start()
         # self.thread_exa.mySig.connect(self.mat)
 
-        self.select_change(1)
         self.pyqtgraph1.clear()
         self.c = self.pyqtgraph1.addPlot(title=self.state, pen=pg.mkPen(color='r', width=2))
         self.c.setLabel('left', "S21", units='dB')
@@ -232,8 +311,26 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.wr.start()
         self.statusBar.showMessage('保存配置成功！', 10 ** 5)
 
-    def readconf(self):
+    def save_config(self):
+        self.writeconf()
+        fileName2, ok2 = QFileDialog.getSaveFileName(self, "保存设置", "./config/", "Setting Files (*.ini)")
+        if fileName2:
+            shutil.copy('e:/bishe/config.ini', fileName2)
+        else:
+            pass
+
+    def readdefconf(self):
         self.rd = read_conf.MyTh('test_all')
+        self.rd.myOut.connect(self.set_text)
+        self.rd.start()
+        self.statusBar.showMessage('从本地读取配置成功', 10 ** 4)
+
+    def readconf(self):
+        directory1, filetype = QFileDialog.getOpenFileName(self,
+                                                           "选取文件",
+                                                           "./config/",
+                                                           "Setting Files (*.ini)")
+        self.rd = read_conf.MyTh('test_all', directory1)
         self.rd.myOut.connect(self.set_text)
         self.rd.start()
         self.statusBar.showMessage('从本地读取配置成功', 10 ** 4)
@@ -261,6 +358,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_5.setStyleSheet(self.blueBtn)
         self.pushButton_8.setStyleSheet(self.blueBtn)
         self.pushButton_11.setStyleSheet(self.redBtn)
+        self.pbtn1.setStyleSheet(self.blueBtn)
 
         # self.pushButton.setStyleSheet(self.blueBtn1)
         # self.pushButton_2.setStyleSheet(self.blueBtn1)
@@ -269,6 +367,19 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         # self.pushButton_6.setStyleSheet(self.blueBtn1)
         # self.pushButton_7.setStyleSheet(self.blueBtn1)
         # self.pushButton_9.setStyleSheet(self.blueBtn1)
+        # self.widget1.setStyleSheet('''
+        #   QPushButton{border:none;color:white;}
+        #   QPushButton#left_label{
+        #     border:none;
+        #     border-bottom:1px solid white;
+        #     font-size:18px;
+        #     font-weight:700;
+        #     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        #   }
+        #   QPushButton#left_button:hover{border-left:4px solid red;font-weight:700;}
+        # ''')
+
+        # self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
 
     # QApplication.processEvents()实现页面刷新
 

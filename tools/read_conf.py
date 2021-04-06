@@ -10,8 +10,7 @@ class ReadConfig:
         if filepath:
             self.configpath = filepath
         else:
-            root_dir = os.path.abspath('.')
-            self.configpath = os.path.join(root_dir, "config.ini")
+            self.configpath = 'e:/bishe/config.ini'
         self.cf = configparser.ConfigParser()
         self.cf.read(self.configpath)
 
@@ -35,42 +34,36 @@ class ReadConfig:
 class MyTh(QThread):
     myOut = pyqtSignal(list)
 
-    def __init__(self, *param):
+    def __init__(self, param, path=None):
         super().__init__()
         self.param = param
+        self.path = path
 
     def run(self):
-        a = ReadConfig()
+        a = ReadConfig(self.path)
         b = []
-        if self.param == ('test_all',):
-            mod = a.get('test_config', 'mod')
-            add = a.get('test_config', 'add')
-            ip = a.get('test_config', 'ip')
-            start = a.get('test_config', 'start')
-            stop = a.get('test_config', 'stop')
-            ifband = a.get('test_config', 'ifband')
-            averages = a.get('test_config', 'averages')
-            power = a.get('test_config', 'power')
-            edelay = a.get('test_config', 'edelay')
-            points = a.get('test_config', 'points')
-            outputfile = a.get('test_config', 'outputfile')
-            distance = a.get('test_config', 'distance')
-            r = a.get('test_config', 'r')
-            degree = a.get('test_config', 'degree')
-            b.append(mod)
-            b.append(add)
-            b.append(ip)
-            b.append(start)
-            b.append(stop)
-            b.append(ifband)
-            b.append(averages)
-            b.append(power)
-            b.append(edelay)
-            b.append(points)
-            b.append(outputfile)
-            b.append(distance)
-            b.append(r)
-            b.append(degree)
-        else:
-            b.append(a.get(*self.param))
+        mod = a.get(self.param, 'mod')
+        add = a.get(self.param, 'add')
+        ip = a.get(self.param, 'ip')
+        start = a.get(self.param, 'start')
+        stop = a.get(self.param, 'stop')
+        ifband = a.get(self.param, 'ifband')
+        averages = a.get(self.param, 'averages')
+        power = a.get(self.param, 'power')
+        edelay = a.get(self.param, 'edelay')
+        points = a.get(self.param, 'points')
+        outputfile = a.get(self.param, 'outputfile')
+        distance = a.get(self.param, 'distance')
+        b.append(mod)
+        b.append(add)
+        b.append(ip)
+        b.append(start)
+        b.append(stop)
+        b.append(ifband)
+        b.append(averages)
+        b.append(power)
+        b.append(edelay)
+        b.append(points)
+        b.append(outputfile)
+        b.append(distance)
         self.myOut.emit(b)

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="test" uuid="809d5fe3-8bb3-4a3a-83af-c3e39ec2dc57">
+    <data-source source="LOCAL" name="test" uuid="f8d614f5-7a64-437c-a83d-c182c08de151">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:E:\bishe\test.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:E:\bishe\database\test.db</jdbc-url>
       <libraries>
         <library>
           <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.25.1/license.txt</url>

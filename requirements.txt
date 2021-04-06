@@ -10,11 +10,15 @@ PyOpenGL==3.1.5
 pyparsing==2.4.7
 PyQt5==5.15.1
 PyQt5-sip==12.8.1
-pyqt5-tools==5.15.1.1.7.*
+PyQt5-stubs==5.14.2.2
+pyqt5-tools==5.15.1.1.7.5
 pyqtgraph==0.11.0
+PyQtWebEngine==5.15.2
 python-dateutil==2.8.1
 python-dotenv==0.14.0
 PyVISA==1.11.1
+pywin32==300
 six==1.15.0
 typing-extensions==3.7.4.3
+WMI==1.5.1
 zipp==3.3.0

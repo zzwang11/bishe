@@ -1,46 +1,47 @@
 import sqlite3
 
 
-class exe:
-    def __init__(self,cc):
-        self.cc = cc
+class mydb:
+    def __init__(self, db):
+        self.db = db
 
-    def exee(self,x):
-        conn = sqlite3.connect('test.db')
+    def one(self, ju):
+        conn = sqlite3.connect(f'{self.db}.db')
         c = conn.cursor()
-        while(x):
-            c.execute(self.cc)
-        # print("Table created successfully")
-        conn.commit()
+        try:
+            c.execute(ju)
+            mmm = c.fetchall()
+            conn.commit()
+        except:
+            conn.rollback()
+            mmm = []
+            print('error')
         conn.close()
-        return c
+        return mmm
 
-    def create_tb(name):
-        conn = sqlite3.connect(f'{name}.db')
-        c = conn.cursor()
 
-        b = '''CREATE TABLE data
-                   (ID INT PRIMARY KEY     NOT NULL,
-                   TIME       DATETIME    NOT NULL,
-                   VALUE1          DOUBLE,     
-                   VALUE2          DOUBLE,
-                                   TEXT);'''
-        c.execute(b)
-        conn.commit()
-        conn.close()
+class mydb2:
+    def __init__(self, db):
+        self.db = db
+        self.conn = sqlite3.connect(f'{self.db}.db')
+        self.c = self.conn.cursor()
 
-    def insert(time, value):
-        b = f'''INSERT INTO data VALUES ({time},{value});'''
-        a = exe(b)
-        a.exee()
+    def pi(self, ju):
+        try:
+            self.c.execute(ju)
+            self.conn.commit()
+        except:
+            self.conn.rollback()
 
-    def read_db(case):
-        b = f'''SELECT * FROM data where {case};'''
-        a = exe(b)
-        out = a.exee()
+    def close(self):
+        self.conn.close()
 
-    def delete(case):
-        b = f'''DELETE from COMPANY where {case};'''
-        a = exe(b)
-        out = a.exee()
 
+# s = mydb('test')
+# s.one('create table mytwo (id int primary key,name text);')
+# s = mydb('test')
+# s.one('insert into myone values (1,"aww")')
+# s.one('insert into myone values (2,"aww")')
+# s.one('insert into myone values (3,"aww")')
+a = mydb('test')
+print(a.one("select name from sqlite_master where type='table'"))
