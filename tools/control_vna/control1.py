@@ -42,7 +42,7 @@ def read_data(path11,pna, start,stop):
     function to read in data from the pna and output it into a file
     """
 
-    time.sleep(30)
+    # time.sleep(30)
     pna.write('CALCulate1:PAR:SEL "Meas"')
     pna.write('CALCulate1:FORMat MLOG')
     ml = pna.query_ascii_values('CALCulate1:DATA? FDATA')
@@ -90,9 +90,10 @@ def getdata(inst: str, mod: str, data: str, start: float, stop: float, averages:
     # while count > 0:
     #     count = count - 1
     time.sleep(2)
-    # while True:
-    #     if inst.query('STAT:OPER:AVER1:COND?')[1] != "0":
-    #         break
+    while True:
+        if int(inst.query('STAT:OPER:AVER1:COND?')) > 0:
+            break
+        time.sleep(0.5)
 
 
     file1 = read_data(outputfile, inst, start,stop)

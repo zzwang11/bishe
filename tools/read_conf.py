@@ -10,7 +10,7 @@ class ReadConfig:
         if filepath:
             self.configpath = filepath
         else:
-            self.configpath = 'h:/bishe/config.ini'
+            self.configpath = './config.ini'
         self.cf = configparser.ConfigParser()
         self.cf.read(self.configpath)
 
@@ -67,3 +67,7 @@ class MyTh(QThread):
         b.append(outputfile)
 
         self.myOut.emit(b)
+
+if __name__ == '__main__':
+    import os
+    print(os.getcwd())

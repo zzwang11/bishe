@@ -3,10 +3,11 @@ from PyQt5.QtCore import QThread
 
 
 class writeThread(QThread):
-    def __init__(self, path='', mod='', add='', ip='', start='', stop='', averages='', power='', edelay='', ifband='',
+    def __init__(self,sec, path='', mod='', add='', ip='', start='', stop='', averages='', power='', edelay='', ifband='',
                  points='',
                  outputfile=''):
         super().__init__()
+        self.sec = sec
         self.path = path
         self.mod = mod
         self.add = add
@@ -25,27 +26,26 @@ class writeThread(QThread):
     def run(self):
         conf = ReadConfig()
         if self.mod != '':
-            conf.setter('field', 'mod', self.mod)
+            conf.setter(self.sec, 'mod', self.mod)
         if self.add != '':
-            conf.setter('field', 'add', self.add)
+            conf.setter(self.sec, 'add', self.add)
         if self.stop != '':
-            conf.setter('field', 'stop', self.stop)
+            conf.setter(self.sec, 'stop', self.stop)
         if self.ip != '':
-            conf.setter('field', 'ip', self.ip)
+            conf.setter(self.sec, 'ip', self.ip)
         if self.startp != '':
-            conf.setter('field', 'start', self.startp)
+            conf.setter(self.sec, 'start', self.startp)
         if self.averages != '':
-            conf.setter('field', 'averages', self.averages)
+            conf.setter(self.sec, 'averages', self.averages)
         if self.power != '':
-            conf.setter('field', 'power', self.power)
+            conf.setter(self.sec, 'power', self.power)
         if self.edelay != '':
-            conf.setter('field', 'edelay', self.edelay)
+            conf.setter(self.sec, 'edelay', self.edelay)
         if self.ifband != '':
-            conf.setter('field', 'ifband', self.ifband)
+            conf.setter(self.sec, 'ifband', self.ifband)
         if self.points != '':
-            conf.setter('field', 'points', self.points)
+            conf.setter(self.sec, 'points', self.points)
         if self.outputfile != '':
-            conf.setter('field', 'outputfile', self.outputfile)
-        # if self.distance != '':
-        #     conf.setter('field', 'distance', self.distance)
+            conf.setter(self.sec, 'outputfile', self.outputfile)
+
 

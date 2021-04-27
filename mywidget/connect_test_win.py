@@ -2,10 +2,10 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-import sys
+
 from tools.test_connect import TestCon
 from tools.get_ins import GetCon
-from tools import write_conf
+from tools import write_conf,read_conf
 from dialog_util.dialogUtil import *
 
 import nsa
@@ -93,15 +93,23 @@ class ConnectTest(QWidget):
         self.comb.activated[str].connect(self.select)
 
     def conn1(self):
+        self.comb.clear()
         self.inst = GetCon()
         self.inst.start()
         self.inst.myOut.connect(self.suan)
+        self.rd_config()
         if self.state == "USB连接":
-            self.comb.addItems(['USB::0x1234::125::A22-5::INSTR'])
+            self.comb.addItems([self.usb])
         elif self.state == "GPIB连接":
-            self.comb.addItems(["GPIB::1::0::INSTR"])
+            self.comb.addItems([self.gpib])
         elif self.state == "网线连接":
-            self.comb.addItems(['TCPIP::192.6.94.9::inst0::INSTR'])
+            self.comb.addItems([self.tcp])
+
+    def rd_config(self):
+        self.rd = read_conf.ReadConfig()
+        self.tcp = self.rd.get('dizhi','tcp')
+        self.usb = self.rd.get('dizhi', 'usb')
+        self.gpib = self.rd.get('dizhi','gpib')
 
     def suan(self, j):
         self.comb.addItems(j)

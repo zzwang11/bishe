@@ -363,7 +363,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
     def writeconf(self):
         print(self.rere)
         li = self.get_con()
-        self.wr = write_conf.writeThread(mod=li[0], add=li[1], ip=li[2], start=li[3], stop=li[4],
+        self.wr = write_conf.writeThread('field',mod=li[0], add=li[1], ip=li[2], start=li[3], stop=li[4],
                                          ifband=li[5], averages=li[6], power=li[7], edelay=li[8], points=li[9],
                                          outputfile=li[10])
         self.wr.start()
