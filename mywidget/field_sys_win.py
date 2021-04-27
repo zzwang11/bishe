@@ -36,7 +36,7 @@ class Ui_MainWindow(object):
         self.h1 = QtWidgets.QHBoxLayout(self.ww)
 
         self.lab1 = QtWidgets.QLabel()
-        jpg5 = QtGui.QPixmap('e:/bishe/img/cha.jpg').scaled(48, 48)
+        jpg5 = QtGui.QPixmap('h:/bishe/img/cha.jpg').scaled(48, 48)
         self.lab1.setPixmap(jpg5)
         self.h1.addWidget(self.lab1)
         self.lab2 = QtWidgets.QLabel()
@@ -87,6 +87,8 @@ class Ui_MainWindow(object):
 •	转台电缆接10 dB的衰减器。
 •	外加的电缆从矢网的Port 1到衰减器（需要SMA阳头 / N阴头转接器）。 
 •	Rx电缆 （专门用于有源测量）从矢网的Port 2到天线测量系统的Rx channel port。
+•	将暗室的通道改为Rx电缆
+•	点击下一步
 ''')
         self.qtext.setReadOnly(True)
         # self.qtext.setEnabled(False)
@@ -95,7 +97,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_5.addLayout(self.gridLayout10)
         self.label_10 = QtWidgets.QLabel()
         self.gridLayout10.addWidget(self.label_10, 1, 0, 1, 4)
-        jpg = QtGui.QPixmap('e:/bishe/img/rx.jpg').scaled(700, 380)
+        jpg = QtGui.QPixmap('h:/bishe/img/rx.jpg').scaled(700, 380)
         self.label_10.setPixmap(jpg)
         self.pushButton_12 = QtWidgets.QPushButton(self.widget3)
         self.pushButton_12.setText('开始测量')
@@ -147,23 +149,23 @@ class Ui_MainWindow(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.pushButton = QtWidgets.QPushButton(self.widget1)
-        self.pushButton.setMaximumSize(200, 30)
+        self.pushButton.setMaximumSize(180, 30)
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout.addWidget(self.pushButton)
-        self.pushButton_2 = QtWidgets.QPushButton(self.widget1)
-        self.pushButton_2.setMaximumSize(200, 30)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.horizontalLayout.addWidget(self.pushButton_2)
-        self.pushButton_4 = QtWidgets.QPushButton(self.widget1)
-        self.pushButton_4.setMaximumSize(200, 30)
-        self.pushButton_4.setObjectName("pushButton_4")
-        self.horizontalLayout.addWidget(self.pushButton_4)
-        self.pushButton_3 = QtWidgets.QPushButton(self.widget1)
-        self.pushButton_3.setMaximumSize(200, 30)
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.horizontalLayout.addWidget(self.pushButton_3)
+        # self.pushButton_2 = QtWidgets.QPushButton(self.widget1)
+        # self.pushButton_2.setMaximumSize(200, 30)
+        # self.pushButton_2.setObjectName("pushButton_2")
+        # self.horizontalLayout.addWidget(self.pushButton_2)
+        # self.pushButton_4 = QtWidgets.QPushButton(self.widget1)
+        # self.pushButton_4.setMaximumSize(200, 30)
+        # self.pushButton_4.setObjectName("pushButton_4")
+        # self.horizontalLayout.addWidget(self.pushButton_4)
+        # self.pushButton_3 = QtWidgets.QPushButton(self.widget1)
+        # self.pushButton_3.setMaximumSize(200, 30)
+        # self.pushButton_3.setObjectName("pushButton_3")
+        # self.horizontalLayout.addWidget(self.pushButton_3)
         self.pushButton_15 = QtWidgets.QPushButton(self.widget1)
-        self.pushButton_15.setMaximumSize(200, 30)
+        self.pushButton_15.setMaximumSize(180, 30)
         self.pushButton_15.setText('下一步')
         self.horizontalLayout.addWidget(self.pushButton_15)
         self.verticalLayout.addLayout(self.horizontalLayout)
@@ -190,10 +192,8 @@ class Ui_MainWindow(object):
 •	转台电缆接10 dB的衰减器。
 •	外加的电缆从矢网的Port 1到衰减器（需要SMA阳头 / N阴头转接器）  
 •	Tx电缆 （专门用于有源测量）从矢网的Port 1到天线测量系统的TX channel Port。
-跟上一步相比，外接电缆连接的端口不同。
-用了Tx电缆，Rx电缆根本没有用。
-点击Start measurement 开始校准。
-校准完毕，点击Next >> 到下一步。
+•	将暗室的通道改为Tx电缆
+•	点击下一步开始测量。
 
         ''')
         self.qtext1.setReadOnly(True)
@@ -203,7 +203,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_51.addLayout(self.gridLayout101)
         self.label_101 = QtWidgets.QLabel()
         self.gridLayout101.addWidget(self.label_101, 1, 0, 1, 4)
-        jpg1 = QtGui.QPixmap('e:/bishe/img/tx.jpg').scaled(700, 380)
+        jpg1 = QtGui.QPixmap('h:/bishe/img/tx.jpg').scaled(700, 380)
         self.label_101.setPixmap(jpg1)
         self.pushButton_13 = QtWidgets.QPushButton(self.widget4)
         self.pushButton_13.setText('上一步')
@@ -227,7 +227,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
         self.gridlayout11 = QtWidgets.QGridLayout()
         self.qtext2 = QtWidgets.QTextEdit()
-        self.qtext2.setText(''' 第三步：参考天线测量
+        self.qtext2.setText(''' 第三步：参考天线测量Rx
 整个测量系统配置如下：
 •	接上转台上的接口。
 •	转台电缆接10 dB的衰减器。
@@ -236,9 +236,9 @@ class Ui_MainWindow(object):
 •	外加电缆的一端接到矢网的Port 2，另一端通过一个N阴头 / N阴头转接头连到Rx电缆。
 •	Rx电缆的一端连到外加电缆，另一端连到到天线测量系统的Rx channel Port。
 •	Tx电缆连接矢网的Port 1到天线测量系统的Tx channel Port。
-点击Next >> 开始测量。
-测量完毕后，点击Next >> 到下一步。
-对每一根参考天线，重复此步骤。
+•	将暗室的通道改为Rx电缆
+•	点击下一步 开始测量。
+
                        ''')
         self.qtext2.setReadOnly(True)
         # self.qtext2.setEnabled(False)
@@ -247,7 +247,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_6.addLayout(self.gridlayout11)
         self.label_11 = QtWidgets.QLabel()
         self.gridlayout11.addWidget(self.label_11, 1, 0, 1, 4)
-        jpg1 = QtGui.QPixmap('e:/bishe/img/cankao.jpg').scaled(700, 380)
+        jpg1 = QtGui.QPixmap('h:/bishe/img/cankao.jpg').scaled(700, 380)
         self.label_11.setPixmap(jpg1)
         self.pushButton_16 = QtWidgets.QPushButton(self.widget5)
         self.pushButton_16.setText('上一步')
@@ -272,11 +272,9 @@ class Ui_MainWindow(object):
         self.gridlayout12 = QtWidgets.QGridLayout()
         self.qtext3 = QtWidgets.QTextEdit()
         self.qtext3.setText(''' 第四步：整个测量系统配置如下：
-•	接通专门的转台接口
-•	装上移动电话转台接口
-•	把转台天线接在转台电缆上
-•	Tx电缆连接矢网的Port 1到天线测量系统的Tx channel Port。
-•	Rx电缆连接矢网的Port 2到天线测量系统的Rx channel Port。
+•	保持第三步的设置不变，将配置的模式改为S12，
+•	将暗室的通道变为TX模式
+•	点击下一步进行测量。
                                ''')
         self.qtext3.setReadOnly(True)
         # self.qtext3.setEnabled(False)
@@ -285,7 +283,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_7.addLayout(self.gridlayout12)
         self.label_11 = QtWidgets.QLabel()
         self.gridlayout12.addWidget(self.label_11, 1, 0, 1, 4)
-        jpg2 = QtGui.QPixmap('e:/bishe/img/tianxian.jpg').scaled(700, 380)
+        jpg2 = QtGui.QPixmap('h:/bishe/img/cankao.jpg').scaled(700, 380)
         self.label_11.setPixmap(jpg2)
         self.pushButton_18 = QtWidgets.QPushButton(self.widget6)
         self.pushButton_18.setText('上一步')
@@ -319,6 +317,7 @@ class Ui_MainWindow(object):
         self.hLayout11.setObjectName("hLayout11")
         self.label_15 = QtWidgets.QLabel(self.hlayoutwidget10)
         self.label_15.setObjectName("label_15")
+        self.label_15.setText('最终结果')
         self.hLayout11.addWidget(self.label_15)
         self.verticalLayout10.addWidget(self.hlayoutwidget10)
         self.horizontalLayout10Widget10 = QtWidgets.QWidget(self.widget7)
@@ -334,8 +333,13 @@ class Ui_MainWindow(object):
         self.pushButton_27 = QtWidgets.QPushButton(self.widget7)
         self.pushButton_27.setMaximumSize(200, 25)
         self.pushButton_27.setMinimumSize(200, 25)
-        self.pushButton_27.setText('保存结果')
+        self.pushButton_27.setText('计算结果')
+        self.pushButton_28 = QtWidgets.QPushButton(self.widget7)
+        self.pushButton_28.setMaximumSize(200, 25)
+        self.pushButton_28.setMinimumSize(200, 25)
+        self.pushButton_28.setText('保存结果')
         self.horizontalLayout10.addWidget(self.pushButton_27)
+        self.horizontalLayout10.addWidget(self.pushButton_28)
         self.horizontalLayout10.setAlignment(QtCore.Qt.AlignRight)
         self.line_3 = QtWidgets.QFrame(self.widget1)
         self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
@@ -387,6 +391,9 @@ class Ui_MainWindow(object):
         self.LineEdit_10 = QtWidgets.QLineEdit(self.formGroupBox)
         self.LineEdit_10.setObjectName("LineEdit_10")
         self.gridLayout.addWidget(self.LineEdit_10, 12, 2, 1, 1)
+        self.pushbutton_22 = QtWidgets.QPushButton(self.formGroupBox)
+        self.pushbutton_22.setText('选择位置...')
+        self.gridLayout.addWidget(self.pushbutton_22, 13, 2, 1, 1)
         self.label_7 = QtWidgets.QLabel(self.formGroupBox)
         self.label_7.setObjectName("label_7")
         self.gridLayout.addWidget(self.label_7, 9, 3, 1, 1)
@@ -552,8 +559,8 @@ class Ui_MainWindow(object):
         MainWindow.setTabOrder(self.LineEdit_10, self.pushButton_6)
         MainWindow.setTabOrder(self.pushButton_6, self.pushButton_7)
         MainWindow.setTabOrder(self.pushButton_7, self.pushButton)
-        MainWindow.setTabOrder(self.pushButton, self.pushButton_2)
-        MainWindow.setTabOrder(self.pushButton_2, self.pushButton_3)
+        # MainWindow.setTabOrder(self.pushButton, self.pushButton_2)
+        # MainWindow.setTabOrder(self.pushButton_2, self.pushButton_3)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -566,20 +573,20 @@ class Ui_MainWindow(object):
         self.Label_13.setText(_translate("MainWindow", "dB"))
         # self.label_8.setText(_translate("MainWindow", "TextLabel"))
         self.pushButton.setText(_translate("MainWindow", "开始"))
-        self.pushButton_2.setText(_translate("MainWindow", "暂停"))
-        self.pushButton_4.setText(_translate("MainWindow", "继续"))
-        self.pushButton_3.setText(_translate("MainWindow", "结束"))
+        # self.pushButton_2.setText(_translate("MainWindow", "暂停"))
+        # self.pushButton_4.setText(_translate("MainWindow", "继续"))
+        # self.pushButton_3.setText(_translate("MainWindow", "结束"))
         self.Label_7.setText(_translate("MainWindow", "输出功率:"))
         self.label_7.setText(_translate("MainWindow", "ns"))
         self.label_6.setText(_translate("MainWindow", "dBm"))
-        self.label_3.setText(_translate("MainWindow", "kHz"))
+        self.label_3.setText(_translate("MainWindow", "Hz"))
         self.Label_9.setText(_translate("MainWindow", "扫描点数:"))
         self.label_2.setText(_translate("MainWindow", "MHz"))
         self.Label_8.setText(_translate("MainWindow", "电延时:"))
         self.Label_4.setText(_translate("MainWindow", "中频带宽:"))
         self.label_5.setText(_translate("MainWindow", "次"))
         self.Label_2.setText(_translate("MainWindow", "起始频率:"))
-        self.Label_10.setText(_translate("MainWindow", "文件名:"))
+        self.Label_10.setText(_translate("MainWindow", "文件位置:"))
         self.Label_6.setText(_translate("MainWindow", "平均次数:"))
         self.Label_3.setText(_translate("MainWindow", "终止频率:"))
         self.label.setText(_translate("MainWindow", "MHz"))

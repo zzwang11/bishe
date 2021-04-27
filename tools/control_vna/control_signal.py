@@ -16,7 +16,7 @@ def pna_setup(pna, mod, points: int, start: float, stop: float, ifband: float, p
     pna.write(f'CALCulate1:PARameter:DEFine:EXT \'Meas\',{mod}')
     pna.write('DISPlay:WINDow1:STATE ON')
     pna.write('DISPlay:WINDow1:TRACe1:FEED \'Meas\'')
-    # pna.write('DISPlay:WINDow1:TRACe2:FEED \'Meas\'')
+    pna.write('DISPlay:WINDow1:TRACe2:FEED \'Meas\'')
     # set parameters for sweep
     pna.write('SENSe1:SWEep:POINts {}'.format(points))
     pna.write('SENSe1:FREQuency:START {}MHZ'.format(start))
@@ -45,30 +45,33 @@ def read_data(path11,pna, data, points, outputfile, power):
 
 
     # read in frequency
-    start = str(pna.query('SENSe1:FREQuency:START?'))[:5]
-    stop = str(pna.query('SENSe1:FREQuency:STOP?'))[:5]
+    start = str(pna.query('SENSe1:FREQuency:START?'))[:6]
+    stop = str(pna.query('SENSe1:FREQuency:STOP?'))[:6]
     # for i in range(10):
-        # read in phase
-        # if data == 'mag':
-        #     pna.write('CALCulate1:FORMat PHASe')
-        # else:
-        #     pna.write('CALCulate1:FORMat REAL')
-        # re = pna.query_ascii_values('CALCulate1:DATA? FDATA', container=np.array)
-        # with open('h:/save/xiangwei.txt','w') as f:
-        #     for i in re:
-        #         f.write(i)
-        # read in mag
+    # # read in phase
     # if data == 'mag':
-    pna.write('CALCulate1:FORMat MLOG')
-    time.sleep(4)
+    #     pna.write('CALCulate1:FORMat PHASe')
+    # else:
+    #     pna.write('CALCulate1:FORMat REAL')
+    # re = pna.query_ascii_values('CALCulate1:DATA? FDATA', container=np.array)
+    # time.sleep(2)
+    # # with open('h:/save/xiangwei.txt','w') as f:
+    # #     for i in re:
+    # #         f.write(i)
+    # # read in mag
+    # if data == 'mag':
+    #     pna.write('CALCulate1:FORMat MLOG')
     # else:
     #     pna.write('CALCulate1:FORMat IMAGinary')
+    # im = pna.query_ascii_values('CALCulate1:DATA? FDATA', container=np.array)
+    pna.write('CALCulate1:FORMat  SMIT')
     im = pna.query_ascii_values('CALCulate1:DATA? FDATA', container=np.array)
     filess = path11+'fudu_'+start+'_'+stop+'_'+str(time.strftime("%H-%M-%S", time.localtime()))+'.txt'
     with open(filess,'w') as f:
-        for i in im:
-            f.write(str(i)+'\n')
-    time.sleep(1)
+        for i in range(len(im)):
+            # f.write(str(im[i])+','+str(re[i])+'\n')
+            f.write(str(im[i]) + '  ' + '\n')
+        # time.sleep(1)
 
     # open output file and put data points into the file
     # file1 = path1 + outputfile[0:-4] + '_' + str(power) + 'dB' + time.strftime('%H-%M-%S', time.localtime()) + '.txt'
@@ -113,28 +116,11 @@ def getdata(inst: str, mod: str, data: str, start: float, stop: float, averages:
     #     if inst.query('STAT:OPER:AVER1:COND?')[1] != "0":
     #         break
 
-
     file1 = read_data(outputfile, inst, data, points, outputfile, power)
 
     inst.write("trace:clear; trace:feed:control next")
     # inst.close()
     return file1
-if __name__ == '__main__':
-
-    mod = 'S21'
-    add = 20
-
-    start = 23500
-    stop = 24500
-    ifband = 100
-    averages = 10
-    power = -30
-    edelay = 20
-    points = 1000
-    outputfile = 'h:/bishe/save/270cm/'
-    rm = pyvisa.ResourceManager()
-    instru = rm.open_resource('TCPIP::192.6.94.10::inst0::INSTR')
-    ss = getdata(instru, mod,'mag', start, stop, averages, power, edelay, ifband, points,outputfile)
 
 
 

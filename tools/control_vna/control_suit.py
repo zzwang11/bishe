@@ -1,4 +1,4 @@
-from tools.control_vna.control import getdata
+from tools.control_vna.control1 import getdata
 from tools.read_conf import ReadConfig
 from PyQt5.QtCore import QThread, QMutex, QWaitCondition, pyqtSignal
 import math
@@ -9,71 +9,37 @@ condi = QWaitCondition()
 
 class suit_cla(QThread):
     mySig = pyqtSignal(int)
-    mySig1 = pyqtSignal()
+    mySig1 = pyqtSignal(str)
+    mySig2 = pyqtSignal()
 
-    def __init__(self, data):
+    def __init__(self, li,data, inst):
         super().__init__()
         self.flag = False
+        self.li = li
         self.data = data
+        self.inst = inst
 
     def run(self):
-        conf = ReadConfig()
-        try:
-            mod = conf.get('test_config', 'mod')
-            ip = conf.get('test_config', 'ip')
-            stop = float(conf.get('test_config', 'stop'))
-            start = float(conf.get('test_config', 'start'))
-            averages = int(conf.get('test_config', 'averages'))
-            power = float(conf.get('test_config', 'power'))
-            edelay = float(conf.get('test_config', 'edelay'))
-            ifband = float(conf.get('test_config', 'ifband'))
-            points = int(conf.get('test_config', 'points'))
-            outputfile = conf.get('test_config', 'outputfile')
-            inst = f'TCPIP::{ip}::inst0::INSTR'
-        except:
-            self.mySig1.emit()
-            return
-        file_list = []
-        if stop > 3000:
-            span = 200
-        else:
-            span = 50
-        if stop - start > span:
-            j = 0
-            start0 = start
-            stop0 = start + span
-            while stop0 < stop:
 
-                if self.flag:
-                    qmute.lock()
-                    condi.wait(qmute)
-                    qmute.unlock()
-                try:
-                    file_list.append(
-                        getdata(inst, mod, self.data, start0, stop0, averages, power, edelay, ifband, points,
-                                outputfile))
-                except:
-                    print("test fail")
-                start0 += span
-                stop0 += span
-                j = j + span
-                i = math.floor((j / (stop - start)) * 100)
-                self.mySig.emit(i)
-            file_list.append(
-                getdata(inst, mod, self.data, stop0, stop, averages, power, edelay, ifband, points, outputfile))
-            self.mySig.emit(100)
+        mod = self.li[0]
 
-        else:
-            try:
-                file_list.append(
-                    getdata(inst, mod, self.data, start, stop, averages, power, edelay, ifband, points, outputfile))
-            except:
-                print("test fail")
-            self.mySig.emit(100)
+        stop = float(self.li[4])
+        start = float(self.li[3])
+        averages = int(self.li[6])
+        power = float(self.li[7])
+        edelay = float(self.li[8])
+        ifband = float(self.li[5])
+        points = int(self.li[9])
+        outputfile = self.li[10]
+        # inst = f'TCPIP::{ip}::inst0::INSTR'
+        # inst = ip
 
-    def pause(self):
-        self.flag = True
 
-    def goon(self):
-        self.flag = False
-        condi.wakeOne()
+        ss = getdata(self.inst, mod, self.data, start, stop, averages, power, edelay, ifband, points,outputfile)
+        self.mySig.emit(100)
+        self.mySig1.emit(ss)
+        self.mySig2.emit()
+
+
+
+

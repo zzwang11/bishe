@@ -10,7 +10,7 @@ class ReadConfig:
         if filepath:
             self.configpath = filepath
         else:
-            self.configpath = 'e:/bishe/config.ini'
+            self.configpath = 'h:/bishe/config.ini'
         self.cf = configparser.ConfigParser()
         self.cf.read(self.configpath)
 
@@ -53,7 +53,7 @@ class MyTh(QThread):
         edelay = a.get(self.param, 'edelay')
         points = a.get(self.param, 'points')
         outputfile = a.get(self.param, 'outputfile')
-        distance = a.get(self.param, 'distance')
+
         b.append(mod)
         b.append(add)
         b.append(ip)
@@ -65,5 +65,5 @@ class MyTh(QThread):
         b.append(edelay)
         b.append(points)
         b.append(outputfile)
-        b.append(distance)
+
         self.myOut.emit(b)

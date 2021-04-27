@@ -20,17 +20,12 @@ class Choice(QDialog):
 
     def initUI(self):
         self.setWindowTitle('选择测试项目')
-        self.setWindowIcon(QIcon('e:/bishe/img/icon.ico'))
+        self.setWindowIcon(QIcon('h:/bishe/img/icon.ico'))
         layout = QGridLayout()
-
-
-
 
         self.button2 = QPushButton('场地系统衰减测试')
         self.button2.clicked.connect(lambda: self.whichButton('field'))
         layout.addWidget(self.button2, 0, 0)
-
-
 
         self.button3 = QPushButton('归一化场地衰减测试')
         self.button3.clicked.connect(lambda: self.whichButton('guiyi'))
@@ -53,8 +48,6 @@ class Choice(QDialog):
         # win5.show()
         if b == 'field':
             self.win1.show()
-        # elif b == 'bwipo':
-        #     self.win2.show()
         elif b == 'guiyi':
             self.win3.show()
         elif b == 'vswr':

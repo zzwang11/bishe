@@ -14,71 +14,50 @@ def pna_setup(pna, mod, points: int, start: float, stop: float, ifband: float, p
     # initial setup for measurement
     # if pna.query('CALC:PAR:CAT:EXT?') != f'"Meas,{mod}"\n':
     pna.write(f'CALCulate1:PARameter:DEFine:EXT \'Meas\',{mod}')
+
+    pna.write(f'CALCulate1:PARameter:DEFine:EXT \'Meas2\',{mod}')
+
     pna.write('DISPlay:WINDow1:STATE ON')
-    pna.write('DISPlay:WINDow1:TRACe1:FEED \'Meas\'')
-    # pna.write('DISPlay:WINDow1:TRACe2:FEED \'Meas\'')
+    pna.write('DISPlay:WIND:TRACe1:FEED \'Meas\'')
+    pna.write('DISPlay:WIND:TRACe2:FEED \'Meas2\'')
     # set parameters for sweep
     pna.write('SENSe1:SWEep:POINts {}'.format(points))
     pna.write('SENSe1:FREQuency:START {}MHZ'.format(start))
     pna.write('SENSe1:FREQuency:STOP {}MHZ'.format(stop))
     pna.write('SENSe1:BANDwidth {}HZ'.format(ifband))
     pna.write('SENSe1:SWEep:TIME:AUTO ON')
+    # pna.write('SENSe1:SWEep:TRI:AUTO OFF')
     pna.write('SOUR:POW1 {}'.format(power))
-    pna.write('CALCulate1:CORRection:EDELay:TIME {}NS'.format(edelay))
+    # pna.write('CALCulate1:CORRection:EDELay:TIME {}NS'.format(edelay))
     pna.write('SENSe1:AVERage:STATe ON')
 
-    # ensure at least 10 averages are taken
-    # if(averages < 10):
-    #    averages = 10
     if averages < 1:
         averages = 1
     averages = averages // 1
     pna.write('SENSe1:AVERage:Count {}'.format(averages))
 
 
-def read_data(path11,pna, data, points, outputfile, power):
+def read_data(path11,pna, start,stop):
     """
     function to read in data from the pna and output it into a file
     """
-    # date = time.strftime('%Y-%m-%d', time.localtime())
-    # path1 = 'h:/bishe/save/'
 
-
-    # read in frequency
-    start = str(pna.query('SENSe1:FREQuency:START?'))[:5]
-    stop = str(pna.query('SENSe1:FREQuency:STOP?'))[:5]
-    # for i in range(10):
-        # read in phase
-        # if data == 'mag':
-        #     pna.write('CALCulate1:FORMat PHASe')
-        # else:
-        #     pna.write('CALCulate1:FORMat REAL')
-        # re = pna.query_ascii_values('CALCulate1:DATA? FDATA', container=np.array)
-        # with open('h:/save/xiangwei.txt','w') as f:
-        #     for i in re:
-        #         f.write(i)
-        # read in mag
-    # if data == 'mag':
+    time.sleep(30)
+    pna.write('CALCulate1:PAR:SEL "Meas"')
     pna.write('CALCulate1:FORMat MLOG')
-    time.sleep(4)
-    # else:
-    #     pna.write('CALCulate1:FORMat IMAGinary')
-    im = pna.query_ascii_values('CALCulate1:DATA? FDATA', container=np.array)
-    filess = path11+'fudu_'+start+'_'+stop+'_'+str(time.strftime("%H-%M-%S", time.localtime()))+'.txt'
-    with open(filess,'w') as f:
-        for i in im:
-            f.write(str(i)+'\n')
-    time.sleep(1)
+    ml = pna.query_ascii_values('CALCulate1:DATA? FDATA')
+    pna.write('CALCulate1:PAR:SEL "Meas2"')
+    pna.write('CALCulate1:FORMat PHAS')
+    ph = pna.query_ascii_values('CALCulate1:DATA? FDATA')
+    ll = []
+    freq = np.linspace(float(start), float(stop), len(ml))
+    for i in freq:
+        ll.append(i)
 
-    # open output file and put data points into the file
-    # file1 = path1 + outputfile[0:-4] + '_' + str(power) + 'dB' + time.strftime('%H-%M-%S', time.localtime()) + '.txt'
-    # file = open(file1, "a")
-    # count = 0
-    # freq = np.linspace(float(pna.query('SENSe1:FREQuency:START?')), float(pna.query('SENSe1:FREQuency:STOP?')), points)
-    # for i in freq:
-    #     file.write(str(re[count]) + ' ' + str(im[count]) + '\n')
-    #     count = count + 1
-    # file.close()
+    filess = path11+'/fudu_'+start+'_'+stop+'_'+str(time.strftime("%H-%M-%S", time.localtime()))+'.txt'
+    with open(filess, 'w') as f:
+        for i in range(len(ml)):
+            f.write(str(ll[i])+' '+str(ml[i])+' '+str(ph[i])+'\n')
 
     return filess
 
@@ -103,6 +82,8 @@ def getdata(inst: str, mod: str, data: str, start: float, stop: float, averages:
     # start taking data for S21
     inst.write('CALCulate1:PARameter:SELect \'Meas\'')
     inst.write('FORMat ASCII')
+    inst.write('CALCulate1:PARameter:SELect \'Meas2\'')
+    inst.write('FORMat ASCII')
 
     # wait until the averages are done being taken then read in the data
     # count = 10000000
@@ -114,11 +95,14 @@ def getdata(inst: str, mod: str, data: str, start: float, stop: float, averages:
     #         break
 
 
-    file1 = read_data(outputfile, inst, data, points, outputfile, power)
+    file1 = read_data(outputfile, inst, start,stop)
 
-    inst.write("trace:clear; trace:feed:control next")
+    inst.write("SYST:FPR")
+    inst.write("CALC:PAR:DEL:ALL")
     # inst.close()
     return file1
+
+
 if __name__ == '__main__':
 
     mod = 'S21'
@@ -130,11 +114,10 @@ if __name__ == '__main__':
     averages = 10
     power = -30
     edelay = 20
-    points = 1000
+    points = 1001
     outputfile = 'h:/bishe/save/270cm/'
     rm = pyvisa.ResourceManager()
     instru = rm.open_resource('TCPIP::192.6.94.10::inst0::INSTR')
     ss = getdata(instru, mod,'mag', start, stop, averages, power, edelay, ifband, points,outputfile)
-
 
 

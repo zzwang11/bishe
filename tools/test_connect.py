@@ -6,17 +6,19 @@ import pyvisa
 class TestCon(QThread):
     myOut = pyqtSignal(int)
 
-    def __init__(self, ins):
+    def __init__(self, ip,rm):
         super().__init__()
-        self.ins = ins
+        self.ip = ip
+        self.rm = rm
 
     def run(self):
-        rm = pyvisa.ResourceManager()
+
         try:
-            inst = rm.open_resource(self.ins)
-            if inst.query('*IDN?'):
+            self.inst = self.rm.open_resource(self.ip)
+            if self.inst.query('*IDN?'):
                 self.myOut.emit(1)
             else:
                 self.myOut.emit(0)
         except:
             self.myOut.emit(0)
+

@@ -5,7 +5,7 @@ from PyQt5.QtCore import QThread
 class writeThread(QThread):
     def __init__(self, path='', mod='', add='', ip='', start='', stop='', averages='', power='', edelay='', ifband='',
                  points='',
-                 outputfile='', distance=''):
+                 outputfile=''):
         super().__init__()
         self.path = path
         self.mod = mod
@@ -19,33 +19,33 @@ class writeThread(QThread):
         self.ifband = ifband
         self.points = points
         self.outputfile = outputfile
-        self.distance = distance
+
 
 
     def run(self):
         conf = ReadConfig()
         if self.mod != '':
-            conf.setter('test_config', 'mod', self.mod)
+            conf.setter('field', 'mod', self.mod)
         if self.add != '':
-            conf.setter('test_config', 'add', self.add)
+            conf.setter('field', 'add', self.add)
         if self.stop != '':
-            conf.setter('test_config', 'stop', self.stop)
+            conf.setter('field', 'stop', self.stop)
         if self.ip != '':
-            conf.setter('test_config', 'ip', self.ip)
+            conf.setter('field', 'ip', self.ip)
         if self.startp != '':
-            conf.setter('test_config', 'start', self.start)
+            conf.setter('field', 'start', self.startp)
         if self.averages != '':
-            conf.setter('test_config', 'averages', self.averages)
+            conf.setter('field', 'averages', self.averages)
         if self.power != '':
-            conf.setter('test_config', 'power', self.power)
+            conf.setter('field', 'power', self.power)
         if self.edelay != '':
-            conf.setter('test_config', 'edelay', self.edelay)
+            conf.setter('field', 'edelay', self.edelay)
         if self.ifband != '':
-            conf.setter('test_config', 'ifband', self.ifband)
+            conf.setter('field', 'ifband', self.ifband)
         if self.points != '':
-            conf.setter('test_config', 'points', self.points)
+            conf.setter('field', 'points', self.points)
         if self.outputfile != '':
-            conf.setter('test_config', 'outputfile', self.outputfile)
-        if self.distance != '':
-            conf.setter('test_config', 'distance', self.distance)
+            conf.setter('field', 'outputfile', self.outputfile)
+        # if self.distance != '':
+        #     conf.setter('field', 'distance', self.distance)
 

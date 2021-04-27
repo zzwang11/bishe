@@ -16,13 +16,16 @@ import svswr
 
 class ConnectTest(QWidget):
     myout = pyqtSignal(int)
-    def __init__(self, win1=''):
+    myout1 = pyqtSignal(str)
+
+    def __init__(self, rm):
         super(ConnectTest, self).__init__()
         self.initUI()
-        self.win1 = win1
+        # self.win1 = win1
+        self.rm = rm
 
     def initUI(self):
-        self.setWindowIcon(QtGui.QIcon('e:/bishe/img/icon.ico'))
+        self.setWindowIcon(QtGui.QIcon('h:/bishe/img/icon.ico'))
         gbox = QGridLayout(self)
         self.setWindowTitle('连接')
 
@@ -40,7 +43,7 @@ class ConnectTest(QWidget):
                                  "QLabel{alignment:AlignHCenter,AlignVCenter}"
                                  )
         gbox.addWidget(self.label, 0, 0, 2, 4)
-        jpg = QtGui.QPixmap('e:/bishe/img/disconn.jpg')
+        jpg = QtGui.QPixmap('h:/bishe/img/disconn.jpg')
         self.label.setPixmap(jpg)
 
         self.radioButton = QtWidgets.QRadioButton()
@@ -98,7 +101,7 @@ class ConnectTest(QWidget):
         elif self.state == "GPIB连接":
             self.comb.addItems(["GPIB::1::0::INSTR"])
         elif self.state == "网线连接":
-            self.comb.addItems(['TCPIP::192.168.0.5::inst0::INSTR'])
+            self.comb.addItems(['TCPIP::192.6.94.9::inst0::INSTR'])
 
     def suan(self, j):
         self.comb.addItems(j)
@@ -115,22 +118,23 @@ class ConnectTest(QWidget):
             self.state = radioButton.text()
 
     def conn(self):
-        self.a = TestCon(self.textlin.text())
+        self.a = TestCon(self.textlin.text(),self.rm)
         self.a.start()
         self.a.myOut.connect(self.jug)
 
     def jug(self, i):
-        if i == 0:
+        if i == 1:
             information_dialog(self, '成功', '连接成功')
             self.myout.emit(1)
-            jpg = QtGui.QPixmap('e:/bishe/img/connect.jpg')
+            self.myout1.emit(self.textlin.text())
+            jpg = QtGui.QPixmap('h:/bishe/img/connect.jpg')
             self.label.setPixmap(QPixmap(""))
             self.label.setPixmap(jpg)
 
         else:
             information_dialog(self, '失败', '连接失败')
             self.myout.emit(0)
-            jpg = QtGui.QPixmap('e:/bishe/img/disconn.jpg')
+            jpg = QtGui.QPixmap('h:/bishe/img/disconn.jpg')
             self.label.setPixmap(QPixmap(""))
             self.label.setPixmap(jpg)
 
@@ -143,12 +147,12 @@ class ConnectTest(QWidget):
         self.close()
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window1 = field_sys.MyMainWindow()
-    window3 = nsa.MyMainWindow()
-    window4 = svswr.MyMainWindow()
-    win1 = start.Choice(window1, window3, window4)
-    demo = ConnectTest(win1)
-    demo.show()
-    sys.exit(app.exec_())
+# if __name__ == '__main__':
+#     app = QApplication(sys.argv)
+#     window1 = field_sys.MyMainWindow()
+#     window3 = nsa.MyMainWindow()
+#     window4 = svswr.MyMainWindow()
+#     win1 = start.Choice(window1, window3, window4)
+#     demo = ConnectTest(win1)
+#     demo.show()
+#     sys.exit(app.exec_())
